@@ -26,9 +26,6 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
         });
 }));
 
-// passport.use(new LocalStrategy(function verify(username, password, cb) {
-//     return cb(null, {id: 1, username: 'vasa'})
-//   }));
 
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {

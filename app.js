@@ -31,10 +31,10 @@ app.set('view engine', 'handlebars')
 const port = process.env.PORT ?? 3000
 
 
-app.use(cookieParser())
+app.use(cookieParser(credentials.cookieSecret))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
-    secret: 'keyboard cat', // надо подтянуть ключевую фразу
+    secret: credentials.cookieSecret,
     resave: false,
     saveUninitialized: false
 }));
@@ -44,7 +44,7 @@ app.use(passport.authenticate('session'));
 
 
 app.use(express.static(__dirname + '/public'))
-// app.use(cookieParser(credentials.cookieSecret))
+
 app.use(vhost('admin.' + domen, admin))
 app.use(vhost('www.' + domen, www))
 
