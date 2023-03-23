@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="{{{lang}}}">
+<head>
+<title>{{{appName}}}</title>
+<link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                {{#each mainNav}}
+                <li>
+                    <a href="/{{{../langPath}}}{{{url}}}" class="{{{class}}}">{{{content}}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </nav>
+        <nav>
+            <ul>{{#each langNav}}
+                <li>
+                    <a href="/{{{url}}}{{{../currentUrl}}}" class="{{{class}}}" id="{{idLang}}">{{{content}}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </nav>
+        
+        <img src="/img/logo.svg" alt="{{{logoAppName}}}">
+    </header>
+{{{body}}}
+{{#if cookiesAgree}}
+<div id="agree" class="{{{cookiesAgree.class}}}">{{{cookiesAgree.content}}}</div>
+{{/if}}
+<script src="/scripts/script.js"></script>
+</body>
+</html>

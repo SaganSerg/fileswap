@@ -1,0 +1,8 @@
+<h1>{{login}}</h1>
+
+<form action="/login/password" method="post" id="enterForm">
+    <input type="text" name="username" id='inputName' class="{{#if enterButtonActive }}disabled{{/if}}">
+    <input type="password" name="password" id="inputPass" class="{{#if enterButtonActive }}disabled{{/if}}">
+    {{#if cookieMessageForForm}}<div class='form__message' id="noAgreeCookieMessage">{{You_are_not_agreed_with_cookie}}</div>{{/if}}
+    <input type="submit" name="button" value="{{buttonValue}}" id="buttonForm" class="{{#if enterButtonActive }}disabled{{/if}}" >
+</form>

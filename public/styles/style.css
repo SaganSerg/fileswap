@@ -1,0 +1,17 @@
+.current {
+    color: grey
+}
+
+.hide {
+    color: whitesmoke
+}
+
+.show {
+    color: red
+}
+
+.disabled {
+    pointer-events: none;
+    color: rgb(179, 165, 165);
+    border-style: hidden;
+}

@@ -1,0 +1,14 @@
+<div id="page_file">
+    <div>{{customer}}</div>
+    <form action="/file/sent" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" name="button" value="{{buttonValue}}" id="buttonForm">
+    </form>
+    <a href="/download?id=1">скачать файл</a>
+    <div>Другая форма с отправкой контрольной суммы файла</div>
+    <form action="/file/upload" method="post" enctype="multipart/form-data" id="formChecksum">
+        <input type="file" name="file" id="downloadfile">
+        <input type="hidden" name="checksum" id="checksum">
+    </form>
+    <div id="submitFile" class="hide">Отправить файл</div>
+</div>
