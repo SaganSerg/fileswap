@@ -118,5 +118,24 @@ function agreeToCookie(){
                 }
             })
         }
+        if (document.querySelector('body.page_cabinet')) { // этот блок онтоситься к странице кабинет
+            let hideShowButton = document.getElementById('hide-show-button'); // доступ к "бутерброду"
+            let mainNav = document.getElementById('main-nav'); // доступ к сайдбару
+            let mainNavHideShow = document.getElementById('main-nav-hide'); // доступ к крестику на сайдбаре
+            function toggleHideShow() { // данная функция переключает у сайдабара класс, который показывает и скрывает сайдбар
+                mainNav.classList.toggle('page__nav_hide-show');
+            }
+            function addEventHideShow (button) { // данная функция навешивает на элементы, событие по которому скрывается-показывается сайдбар
+                button.addEventListener('click', toggleHideShow );
+            }
+            if (mainNav) { // данное условие нужно на всякий случай
+                if (hideShowButton) { // данное условие нужно для подстаховки
+                    addEventHideShow(hideShowButton);
+                }
+                if (mainNavHideShow) { // данное условие нужно для подстраховки
+                    addEventHideShow(mainNavHideShow);
+                }
+            }
+        }
     })
 })()
