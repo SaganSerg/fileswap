@@ -1,35 +1,48 @@
-<!doctype html>
-<html lang="{{{lang}}}">
+<!DOCTYPE html>
+<html class="document" lang="{{{lang}}}">
+
 <head>
-<title>{{{appName}}}</title>
-<link rel="stylesheet" href="/styles/style.css">
+    <!-- <meta name="yandex-verification" content="7f395c22ce58ae44" /> --> <!-- это нужно для верификации яндекса, может вообще не понадобиться -->
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{{appName}}}</title>
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                {{#each mainNav}}
-                <li>
-                    <a href="/{{{../langPath}}}{{{url}}}" class="{{{class}}}">{{{content}}}</a>
-                </li>
-                {{/each}}
-            </ul>
-        </nav>
-        <nav>
-            <ul>{{#each langNav}}
-                <li>
-                    <a href="/{{{url}}}{{{../currentUrl}}}" class="{{{class}}}" id="{{idLang}}">{{{content}}}</a>
-                </li>
-                {{/each}}
-            </ul>
-        </nav>
-        
-        <img src="/img/logo.svg" alt="{{{logoAppName}}}">
+
+<body class="document__page page page_{{{pageMark}}}">
+    <!-- здесь есть класс page_index который является индивидуальным для страницы -->
+    <noscript class="page__warning">{{{MessageNoScript}}}</noscript>
+    <header class="page__header page__header_buttom-margin page__header_light">
+        <a class='normal-link normal-link__input page__logo logo' href="/{{{langPath}}}/">{{{OurTagline}}}</a>
+        <div class="page__lang-switcher lang-switcher">
+            {{#each langNav}}
+            <a href="/{{{url}}}{{{../currentUrl}}}" class="lang-switcher__wrapper-input lang-switcher__item {{{class}}}" id="{{idLang}}">{{{content}}}</a>
+            {{/each}}
+        </div>
     </header>
-{{{body}}}
-{{#if cookiesAgree}}
-<div id="agree" class="{{{cookiesAgree.class}}}">{{{cookiesAgree.content}}}</div>
-{{/if}}
-<script src="/scripts/script.js"></script>
+    <main class="page__main main main_flex">
+        {{{body}}}
+    </main>
+    <footer class="page__footer footer">
+        <nav class="footer_nav nav">
+            <ul class="nav__link-list">
+                {{#each mainNav}}
+                <li class='nav__link-item'>
+                    <a href="/{{{../langPath}}}{{{url}}}" class="normal-link normal-link__input nav__link {{{class}}}">{{{content}}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </nav>
+    </footer>
+    {{#if cookiesAgree}}
+    <div class='page__agreement agreement {{{cookiesAgree.class}}}' id="agreeBlock">
+        <div class='agreement__title'>{{{cookiesAgree.We_use_cookies}}}</div>
+        <div class='agreement__explanation'>{{{cookiesAgree.By_continuing_to_use_the_site_you_agree_to_the_terms_of_use_of_cookies}}}</div>
+        <div class="agreement__agreement-submit" id="agree">{{{cookiesAgree.agree}}}</div>
+    </div>
+    {{/if}}
+    <script src="/scripts/script.js"></script>
 </body>
+
 </html>

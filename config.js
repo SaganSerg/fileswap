@@ -1,9 +1,11 @@
 const env = process.env.NODE_ENV || 'development'
 const credentials = require(`./.credentials.${env}`)
+const sberUserName = 'sberUserName'
+const port = 3000
 const domen = 'simple.loc'
 const protocol = 'http'
 const host = 'localhost'
-const user = 'admin_simple'
-const password = 'Baron_15'
-const database = 'simple'
-module.exports = { credentials , domen, protocol, host, user, password, database }
+const user = 'admin_chiptuning'
+const password = 'Vagon_3611'
+const database = 'chiptuning'
+module.exports = { credentials , domen, protocol, host, user, password, database, port, sberUserName }

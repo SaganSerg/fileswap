@@ -15,7 +15,7 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
         [username], 
         function (err, row) {
             if (err) { return cb(err); }
-            if (!row) { return cb(null, false, { message: 'Incorrect username or password.' }); }
+            if (row.length === 0) { return cb(null, false, { message: 'Incorrect username or password.' }); }
             crypto.pbkdf2(password, row[0].customer_solt, 310000, 32, 'sha256', function (err, hashedPassword) {
                 if (err) { return cb(err); }
                 if (!crypto.timingSafeEqual(row[0].customer_password_hashed, hashedPassword)) {
@@ -38,44 +38,47 @@ passport.deserializeUser(function (user, cb) {
         return cb(null, user);
     });
 });
-router.get('/:lang/login', (req, res, next) => {
-    lang = req[projectSymbolName]['lang'];
-    langManager.checkLangWrapper(req, res, next, (dictionary) => {
-        res.render('login', Object.assign(
-            require('./../views/login').pageElements(dictionary, {
-                currentUrl: '/login',
-                cookieMessageForForm: !req[projectSymbolName]['cookiesAgree'],
-                enterButtonActive: !req[projectSymbolName]['cookiesAgree']
+// router.get('/:lang/login', (req, res, next) => {
+//     lang = req[projectSymbolName]['lang'];
+//     langManager.checkLangWrapper(req, res, next, (dictionary) => {
+//         res.render('login', Object.assign(
+//             require('./../views/login').pageElements(dictionary, {
+//                 currentUrl: '/login',
+//                 cookieMessageForForm: !req[projectSymbolName]['cookiesAgree'],
+//                 enterButtonActive: !req[projectSymbolName]['cookiesAgree']
 
-            }
-            ),
-            getParamMain(dictionary, req, res, {
-                mainNav: {
-                    classLogin: 'current',
-                }
-            }),
+//             }
+//             ),
+//             getParamMain(dictionary, req, res, {
+//                 mainNav: {
+//                     classLogin: 'current',
+//                 }
+//             }),
 
-        )
-        )
-    }
-    )
-})
+//         )
+//         )
+//     }
+//     )
+// })
 router.post('/login/password', passport.authenticate('local', {
-    successRedirect: '/cabinet',
-    failureRedirect: '/noauthentication'
+    successRedirect: '/authentification',
+    failureRedirect: '/noauthentification'
 }));
-router.get('/cabinet', function (req, res, next) {
-    res.redirect(303, '/' + req[projectSymbolName]['lang'] + '/cabinet')
-})
-router.get('/noauthentication', function (req, res, next) {
-    res.redirect(303, '/' + req[projectSymbolName]['lang'] + '/noauthentication')
-})
+// router.get('/authentification', function (req, res, next) {
+//     res.redirect(303, '/' + req[projectSymbolName]['lang'] + '/buy')
+// })
+// router.get('/noauthentification', function (req, res, next) {
+//     res.redirect(303, '/' + req[projectSymbolName]['lang'] + '/')
+// })
+
 router.post('/logout', function (req, res, next) {
     req.logout(function (err) {
         if (err) { return next(err); }
         res.redirect(303, '/' + req[projectSymbolName]['lang'] + '/');
     });
 });
+
+
 router.get('/:lang/signup', function (req, res, next) {
     langManager.checkLangWrapper(req, res, next, (dictionary) => {
         res.render('signup', Object.assign(

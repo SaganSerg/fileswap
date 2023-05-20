@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html class="document" lang="{{{lang}}}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{{appName}}}</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+
+<body class="document__page page page_cabinet">
+    <noscript class="page__warning">{{{MessageNoScript}}}</noscript>
+    <header class="page__header page__header_buttom-margin page__header_grey">
+        <form class="normal-link" method="post" action="/logout">
+            <button class="normal-link__input page__exit exit" type="submit">{{{Exit}}}</button>
+        </form>
+        <div class='page__logo logo'>{{{OurTagline}}}</div>
+        <div class="page__lang-switcher lang-switcher">
+            <div class="page__hide-show hide-show" id="hide-show-button"></div>
+            
+            {{#each langNav}}
+                
+                    <a href="/{{{url}}}{{{../currentUrl}}}" class="lang-switcher__wrapper-input lang-switcher__item {{{class}}}" id="{{idLang}}">{{{content}}}</a>
+                
+            {{/each}}
+            
+        </div>
+    </header>
+    <main class="page__main main main_flex">
+        <nav class="page__nav main-nav page__nav_hide-show" id='main-nav'>
+            <div class="main-nav__hide" id="main-nav-hide"></div>
+            <div class="main-nav__login">{{{login}}}</div>
+            <div class="main-nav__coins coins">{{{HowCoins}}} <span class="coins__count"> {{{coins}}} </span></div>
+            <ul class="main-nav__links">
+                {{#each mainNav}}
+                <li class='main-nav__item'>
+                    <a href='/{{{../langPath}}}{{{url}}}' class="normal-link normal-link__input main-nav__link {{class}}">{{{content}}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </nav>
+        {{{body}}}
+        </main>
+<script src="/scripts/script.js"></script>
+</body>
+
+</html>

@@ -1,1 +1,16 @@
-<h1>{{welcome}}</h1>
+<form class="main__form form" method="POST" action="/login/password" id="home">
+    <fieldset class="form__block-form">
+        <legend class="form__title">{{{For_registered_user}}}</legend>
+        <label class="form__wrapper-input">
+            <div class='form__message hide' id="You_must_give_your_consent_to_the_use_of_cookies">{{{You_must_give_your_consent_to_the_use_of_cookies}}}</div>
+            <div class='form__message hide' id="Incorrect_login_or_password">{{{Incorrect_login_or_password}}}</div>
+            <input type='text' name='username' class='form__input' placeholder='{{{email}}}'>
+        </label>
+        <label class="form__wrapper-input">
+            <input type='password' name='password' class='form__input' placeholder='{{{password}}}'>
+        </label>
+        <button class="form__button button button__transparent" id="sendButton" type="submit">{{{login}}}</button>
+    </fieldset>
+</form>
+<a class="normal-link normal-link__input main__button button button__green" href="/{{{langPath}}}/registration">{{{signUp}}}</a>
+{{!-- <a class="normal-link normal-link__input main__button button button__green" href="">{{{Remember_password}}}</a> --}}

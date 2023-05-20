@@ -1,0 +1,31 @@
+<article class="main__content content content_profile" id="profile">
+    <h1 class='content__title'>{{HereWeCanChangeYourDataTitle}}</h1>
+    <ul class='content__profileList profileList'>
+        <li class='profile__element profile__element_tel'>{{TelephoneNumberMark}} --- {{telephoneNumber}}</li>
+        <li class='profile__element profile__element_valuta'>{{currencyMark}} -- {{currency}}</li>
+    </ul>
+    <form class="content__form profile-form" method="POST" action="/profile" id="profile-form">
+        <label class="profile-form__input-block profile-input-block">
+            {{#if InTelephoneNumberIsNot11characterCondition}}
+            <div class='profile-input-block__message hide' id="InTelephoneNumberIsNot11character">{{InTelephoneNumberIsNot11character}}</div>
+            {{/if}}
+             {{#if InTelephoneNumberIsNotOnlyNumericCondition}}
+            <div class='profile-input-block__message hide' id="InTelephoneNumberIsNotOnlyNumeric">{{InTelephoneNumberIsNotOnlyNumeric}}</div>
+            {{/if}}
+            <div class="profile-input-block__discription">{{EnterNewPhoneNumber}}</div>
+            <input type="text" class="profile-input-block__input" placeholder="{{telephoneValue}}" name="telephone">
+            <span class="profile-input-block__whatisit">{{Telephone}}</span>
+        </label>
+        <label class="profile-form__input-block profile-input-block">
+            <div class="profile-input-block__discription">{{ChooseCurrencyIsForPay}}</div>
+            <select class='profile-input-block__input' name='currency' size='1'>
+                <option disabled selected value='empty'>{{ChooseCurrency}}</option>
+                <option value="RUB">{{Ruble}}</option>
+                <option value="USD">{{Dollar}}</option>
+                <option value="EUR">{{Euro}}</option>
+            </select>
+            <span class="profile-input-block__whatisit">{{Currency}}</span>
+        </label>
+        <button class="profile-form__submit submit" id="profile-form__submit" type="submit"><span class="submit_contentText">{{Send}}</span></button>
+    </form>
+</article>

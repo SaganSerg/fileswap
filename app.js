@@ -11,7 +11,7 @@ const bodyParser = require('body-parser')
 const langManager = require('./lib/langManager')
 const commonVar = require('./lib/commonVar')
 const vhost = require('vhost')
-const { credentials, domen, protocol } = require('./config')
+let { credentials, domen, protocol, port } = require('./config')
 
 
 const projectSymbolName = commonVar.projectName // мы получили символьное имя для собстенных свойств в объектах express
@@ -28,11 +28,12 @@ let www = express.Router()
 app.engine('handlebars', eppressHandlebarObj.engine)
 app.set('view engine', 'handlebars')
 
-const port = process.env.PORT ?? 3000
+port = process.env.PORT ?? port
 
 
 app.use(cookieParser(credentials.cookieSecret))
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(session({
     secret: credentials.cookieSecret,
     resave: false,

@@ -1,0 +1,49 @@
+        <form class="main__form form" method="POST" action="/registration" id="registration">
+            <fieldset class="form__block-form">
+                <legend class="form__title">{{{Primary_registration}}}</legend>
+                <label class="form__wrapper-input">
+                    <div class='form__message hide' id="You_must_give_your_consent_to_the_use_of_cookies">{{{You_must_give_your_consent_to_the_use_of_cookies}}}</div>
+                    <div class='form__message hide' id="The_entered_data_is_not_a_valid_email_format">{{{The_entered_data_is_not_a_valid_email_format}}}</div>
+                    <div class='form__message hide' id="Your_email_address_must_be_no_longer_than_50_characters">{{{Your_email_address_must_be_no_longer_than_50_characters}}}</div>
+                    <div class='form__message hide' id="You_didnt_enter_anything_in_the_email_address_field">{{{You_didnt_enter_anything_in_the_email_address_field}}}</div>
+                    <div class='form__message hide' id="This_email_address_is_already_registered">{{{This_email_address_is_already_registered}}}</div> 
+                    <div class="form__description" >{{{Enter_your_email_address}}}</div>
+                    <input type="email" class='form__input' name="email">
+                    <span class="form__whatis">{{{EmailAddressMark}}}</span>
+                </label>
+                <label class="form__wrapper-input">
+                    <div class='form__message hide' id="InTelephoneNumberIsNot11character">{{{InTelephoneNumberIsNot11character}}}</div>
+                    <div class='form__message hide' id="InTelephoneNumberIsNotOnlyNumeric">{{{InTelephoneNumberIsNotOnlyNumeric}}}</div>
+                    <div class='form__message hide' id="You_didnt_enter_anything_in_the_phone_number_field">{{{You_didnt_enter_anything_in_the_phone_number_field}}}</div>
+                    <div class="form__description">{{{Enter_the_phone_number_according_to_the_scheme}}} 71001234567</div>
+                    <input type='text' class='form__input' placeholder='79001234567' name='telephone'>
+                    <span class="form__whatis">{{{TelephoneNumberMark}}}</span>
+                </label>
+                <label class="form__wrapper-input">
+                    <div class='form__message hide' id="You_have_not_selected_a_currency">{{{You_have_not_selected_a_currency}}}</div>
+                    <div class="form__description">{{{ChooseCurrencyIsForPay}}}</div>
+                    <select class='form__input' name='currency' size='1'>
+                        <option disabled selected value='empty'>{{{ChooseCurrency}}}</option>
+                        <option value='USD' >{{{Dollar}}}</option>
+                        <option value='EUR' >{{{Euro}}}</option>
+                        <option value='RUB' >{{{Ruble}}}</option>
+                    </select>
+                    <span class="form__whatis">{{{Currency}}}</span>
+                </label>
+                <label class="form__wrapper-input">
+                    <div class='form__message hide' id="Password_too_long_or_too_short">{{{Password_too_long_or_too_short}}}</div>
+                    <div class='form__message hide' id="You_didnt_enter_anything_in_the_password_field">{{{You_didnt_enter_anything_in_the_password_field}}}</div>
+                    <div class="form__description">{{{Enter_password}}}</div>
+                    <input type='password' class='form__input' name='password'>
+                    <span class="form__whatis">{{{Password}}}</span>
+                </label>
+                <label class="form__wrapper-input">
+                    <div class='form__message hide' id="Password_mismatch">{{{Password_mismatch}}}</div>
+                    <div class='form__message hide' id="You_didnt_enter_anything_in_the_password_mismatch_field">{{{You_didnt_enter_anything_in_the_password_mismatch_field}}}</div>
+                    <div class="form__description">{{{Repeat_password}}}</div>
+                    <input type='password' class='form__input' name='repeat_password'>
+                    <span class="form__whatis">{{{Password_confirmation}}}</span>
+                </label>
+                <button type="submit" class="form__button button button__transparent" id="sendForm">{{{Send}}}</button>
+            </fieldset>
+        </form>

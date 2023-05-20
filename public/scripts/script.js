@@ -1,4 +1,24 @@
 "use strict";
+function makeReq(url, fun, method = 'GET' ) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        fun(this)
+    }
+    };
+    xhr.open(method, url, true);
+    xhr.send();
+}
+const processRequest = async (url, fun, catchFun, method) => {
+    try {
+        const res = await fetch(url, {method: method})
+        await fun(res)
+    } catch(e){
+        catchFun(e)
+    }
+    
+}
+
 function crc16MODBUS(string){
     var CrcTable = [
         0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
@@ -86,7 +106,9 @@ function agreeToCookie(){
                 document.cookie = `lang=${lang};path=/;samesite=lax;expires=` + new Date(Date.now() + 86400e3).toUTCString();
             }
             document.cookie = "agree=yes;path=/;samesite=lax;expires=" + new Date(Date.now() + 86400e3).toUTCString();
-            agree.classList.contains('show') && agree.classList.remove('show'), agree.classList.add('hide')
+            let agreeBlock
+            if (agreeBlock = document.getElementById('agreeBlock'))
+            agreeBlock.classList.contains('show') && agreeBlock.classList.remove('show'), agreeBlock.classList.add('hide')
             if (document.getElementById('enterForm')) {
                 makeInputIsActive(['buttonForm', 'inputName', 'inputPass'])
                 hideMessageAboutCookie()
@@ -135,6 +157,504 @@ function agreeToCookie(){
                 if (mainNavHideShow) { // данное условие нужно для подстраховки
                     addEventHideShow(mainNavHideShow);
                 }
+            }
+        }
+        let loginForm
+        if (loginForm = document.getElementById('home')) {
+            let sendButton
+            if (sendButton = document.getElementById('sendButton')) {
+                loginForm.addEventListener('submit', function(evt) {
+                    evt.preventDefault()
+                    const form = evt.target
+                    const body = JSON.stringify({
+                        username: form.elements.username.value,
+                        password: form.elements.password.value
+                    })
+                    const headers = {'Content-Type': 'application/json'}
+                    fetch('/login/password', {method: 'POST', body, headers})
+                    .then(res => res.json())
+                    .then(res => {
+                        let paramRes = JSON.parse(res);
+                        if (paramRes.itisgood) {
+                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/buy-coin'
+                            location.assign(url)
+                        } else {
+                            paramRes.allMessages.forEach(id => {
+                                let elem
+                                if (elem = document.getElementById(id)) elem.classList.add('hide')
+                            })
+                            paramRes.messages.forEach((elem) => {
+                                document.getElementById(elem).classList.remove('hide')
+                            })
+                            sendButton.classList.remove('wait')
+                        }
+                    })
+                    .catch(err => console.log(err))
+                    sendButton.classList.add('wait')
+                })
+            }
+        }
+        let registrationForm
+        if (registrationForm = document.getElementById('registration')) {
+            let submitForm
+            if (submitForm = document.getElementById('sendForm')) {
+                registrationForm.addEventListener('submit', function(evt) {
+                    evt.preventDefault()
+                    const form = evt.target
+                    const body = JSON.stringify({
+                        email: form.elements.email.value,
+                        telephone: form.elements.telephone.value,
+                        currency: form.elements.currency.value,
+                        password: form.elements.password.value,
+                        repeat_password: form.elements.repeat_password.value
+                    })
+                    const headers = { 'Content-Type': 'application/json' }
+                    fetch('/registration', {method: 'POST', body, headers})
+                    .then(res => res.json())
+                    .then(res => {
+                        let paramRes = JSON.parse(res);
+                        paramRes.allMessages.forEach(id => {
+                            let elem
+                            if (elem = document.getElementById(id)) elem.classList.add('hide') 
+                        })
+                        if (paramRes.itisgood) {
+                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/buy-coin'
+                            location.assign(url)
+                        } else {
+                            paramRes.messages.forEach((elem) => {
+                                document.getElementById(elem).classList.remove('hide')
+                            })
+                            submitForm.classList.remove('wait') 
+                        }
+                    })
+                    .catch(err => console.log(err))
+                    submitForm.classList.add('wait') 
+                })
+            }
+        }
+        // if (document.getElementById('profile')) {
+        //     let form, submit, url = '/profile', 
+        //     fun = (request) => {
+        //         console.log(typeof request.responseText)
+        //     }
+        //     if ((form = document.getElementById('profile-form')) && (submit = document.getElementById('profile-form__submit'))) {
+        //         form.addEventListener('submit', function (env) {
+        //             env.preventDefault();
+        //         });
+        //         submit.addEventListener('click', () => {
+        //             makeReq(url, fun, 'POST')
+        //         });
+        //     }
+        // }
+        
+        if (document.getElementById('profile')) {
+            let form, submit
+            // fun = (res) => {
+            //     console.log(res)
+            // },
+            // catchFun = (err) => {
+            //     console.log(err)
+            // }
+            // console.log(document.getElementById('profile-form'))
+            // console.log(document.getElementById('profile-form__submit'))
+
+            if ((form = document.getElementById('profile-form')) && (submit = document.getElementById('profile-form__submit'))) {
+                form.addEventListener('submit', function (evt) {
+                    evt.preventDefault();
+                    const form = evt.target
+                    const body = JSON.stringify({
+                        telephone: form.elements.telephone.value,
+                        currency: form.elements.currency.value,
+                    })
+                    const headers = { 'Content-Type': 'application/json' }
+                    fetch('/profile', {method: 'POST', body, headers})
+                    .then(res => res.json())
+                    .then(res => {
+                        let paramRes = JSON.parse(res);
+                        paramRes.allMessages.forEach(id => {
+                            let elem
+                            if (elem = document.getElementById(id)) elem.classList.add('hide') 
+                        })
+                        if (paramRes.itisgood) {
+                            console.log('it is now')
+                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/profile'
+                            location.assign(url)
+                        } else {
+                            paramRes.messages.forEach((elem) => {
+                                document.getElementById(elem).classList.remove('hide')
+                            })
+                            // submitForm.classList.remove('wait') 
+                            let button
+                            if (button = document.getElementById('profile-form__submit')) button.classList.remove('wait') 
+                        }
+                    })
+                    .catch(err => console.log(err))
+                    // submitForm.classList.add('wait') 
+                    let button
+                    if (button = document.getElementById('profile-form__submit')) button.classList.add('wait') 
+                });
+                // const data = new FormData(form);
+                // console.log(data)
+
+
+                // submit.addEventListener('click', () => {
+                //     fetch('/profile', {method: 'POST', body: data})
+                //     .then(res => res.json())
+                //     .then(res => {
+                //         let paramRes = JSON.parse(res);
+                //         ['InTelephoneNumberIsNot11character', 'InTelephoneNumberIsNotOnlyNumeric'] // это id-шники тех сообщений о неправильный вводах
+                //         .forEach(id => {
+                //             let elem
+                //             if (elem = document.getElementById(id)) elem.classList.add('hide') 
+                //         })
+                //         if (paramRes.itisgood) {
+                //             let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/profile'
+                //             location.assign(url)
+                //         } else {
+                //             paramRes.messages.forEach((elem) => {
+                //                 document.getElementById(elem).classList.remove('hide')
+                //             })
+                //             let button
+                //             if (button = document.getElementById('profile-form__submit')) button.classList.remove('wait') 
+                //         }
+                //     })
+                //     .catch(err => console.log(err) )
+                //     let button
+                //     if (button = document.getElementById('profile-form__submit')) button.classList.add('wait') 
+                // });
+            }
+        }
+        if (document.getElementById('select-file')) {
+            let formVehicle, submitVehicle, formBrand, submitBrand, formModel, submitModel, formECU, submitECU, formTreatmentFile, submitTreatmentFile, hiddenVehicleType, hiddenBrandType, hiddenModleType, hiddenECUtype, block_list_services, optionReadingDevice, optionBrand, optionModel, optionECU, selectedType, selectedBrand, selectedModel, selectedUCU, vehicleType, vehicleTypeBrand, vehicleTypeModel, vehicleBrandModel, vehicleTypeECU, vehicleBrandECU, vehicleModelECU, vehicleOriginalFile, checksum, fileNotUploaded, fileBiger
+            if (
+                (formVehicle = document.getElementById('form-choose-vehicle')) && 
+                (submitVehicle = document.getElementById('submitVehicle')) && 
+                (formBrand = document.getElementById('form-choose-brand')) && 
+                (submitBrand = document.getElementById('submitBrand')) && 
+                (formModel = document.getElementById('form-choose-model')) && 
+                (submitModel = document.getElementById('submitModel')) && 
+                (formECU = document.getElementById('form-choose-ecu')) && 
+                (submitECU = document.getElementById('submitECU')) && 
+                (formTreatmentFile = document.getElementById('form_treatment_file')) && 
+                (submitTreatmentFile = document.getElementById('submit-file')) &&
+
+                (hiddenVehicleType = document.getElementById('hiddenVehicleType')) &&
+                (hiddenBrandType = document.getElementById('hiddenBrandType')) &&
+                (hiddenModleType = document.getElementById('hiddenModleType')) &&
+                (hiddenECUtype = document.getElementById('hiddenECUtype')) &&
+
+                (block_list_services = document.getElementById('block_list_services')) &&
+                (optionReadingDevice = document.getElementById('optionReadingDevice')) &&
+
+                (optionBrand = document.getElementById('optionBrand')) &&
+                (optionModel = document.getElementById('optionModel')) &&
+                (optionECU = document.getElementById('optionECU')) &&
+
+                (selectedType = document.getElementById('selected-type')) && 
+                (selectedBrand = document.getElementById('selected-brand')) &&
+                (selectedModel = document.getElementById('selected-model')) &&
+                (selectedUCU = document.getElementById('selected-ecu')) &&
+
+                (vehicleType = document.getElementById('vehicle-type')) &&
+
+                (vehicleTypeBrand = document.getElementById('vehicle_type_brand')) && // vehicle_type_brand
+
+                (vehicleTypeModel = document.getElementById('vehicle_type_model')) &&
+                (vehicleBrandModel = document.getElementById('vehicle_brand_model')) &&
+
+                (vehicleTypeECU = document.getElementById('vehicle_type_ecu')) &&
+                (vehicleBrandECU = document.getElementById('vehicle_brand_ecu')) &&
+                (vehicleModelECU = document.getElementById('vehicle_model_ecu')) &&
+
+
+                (vehicleOriginalFile = document.getElementById('vehicle-original-file')) &&
+                (checksum = document.getElementById('checksum')) &&
+
+                (fileNotUploaded =  document.getElementById('file-not-uploaded')) &&
+                (fileBiger = document.getElementById('file-biger'))
+
+
+            ) {
+                formVehicle.addEventListener('submit', function (evt) { // здесь мы отправляли type
+                    evt.preventDefault();
+                    const form = evt.target
+                    const body = JSON.stringify({
+                        vehicle_type: form.elements.vehicle_type.value
+                    })
+                    const headers = { 'Content-Type': 'application/json' }
+                    fetch('/vehicle-type', {method: 'POST', body, headers})
+                    .then(res => res.json())
+                    .then(res => {
+                        let paramRes = JSON.parse(res);
+                        paramRes.allMessages.forEach(id => {
+                            let elem
+                            if (elem = document.getElementById(id)) elem.classList.add('hide') 
+                        })
+                        if (paramRes.itisgood) {
+                            formVehicle.classList.add('hide')
+                            let tegs = ''
+                            paramRes.results.forEach((elem) => {
+                                tegs += `<option value='${elem.data_value}'>${elem.data_value}</option>\n`
+                            })
+                            optionBrand.insertAdjacentHTML('afterend', tegs)
+                            
+                            for (let i of vehicleType.children) { // это нужно для того, чтобы "работал" перевод
+                                if (i.value === form.elements.vehicle_type.value)
+                                selectedType.innerHTML = i.textContent
+                            }
+
+                            hiddenVehicleType.value = vehicleTypeBrand.value = vehicleTypeModel.value = vehicleTypeECU.value = form.elements.vehicle_type.value
+                            submitBrand.classList.remove('hide')
+                            formBrand.classList.remove('noevents')
+                            formBrand.classList.remove('opacity')
+
+                            // ######
+                            formBrand.addEventListener('submit', (evt) => { // здесь отправляем brand и type
+                                evt.preventDefault()
+                                const form = evt.target
+                                const body = JSON.stringify({
+                                    vehicle_brand: form.elements.vehicle_brand.value,
+                                    vehicle_type: form.elements.vehicle_type.value
+                                })
+                                const headers = {'Content-Type': 'application/json'}
+                                fetch('/vehicle-brand', { method: 'POST', body, headers})
+                                .then(res => res.json())
+                                .then(res => {
+                                    let paramRes = JSON.parse(res)
+                                    paramRes.allMessages.forEach(id => {
+                                        let elem
+                                        if (elem = document.getElementById(id)) elem.classList.add('hide')
+                                    })
+                                    if (paramRes.itisgood) {
+                                        formBrand.classList.add('hide')
+                                        let tegs = ''
+                                        paramRes.results.forEach((elem) => {
+                                            tegs += `<option value='${elem.data_value}'>${elem.data_value}</option>\n`
+                                        })
+                                        console.log(paramRes)
+                                        optionModel.insertAdjacentHTML('afterend', tegs)
+                                        selectedBrand.innerHTML = form.elements.vehicle_brand.value
+                                        hiddenBrandType.value = vehicleBrandModel.value = vehicleBrandECU.value = form.elements.vehicle_brand.value
+                                        submitModel.classList.remove('hide')
+                                        formModel.classList.remove('noevents')
+                                        formModel.classList.remove('opacity')
+
+                                        //#####
+                                        formModel.addEventListener('submit', evt => { // здесь отправляем model brand type
+                                            evt.preventDefault()
+                                            const form = evt.target
+                                            const body = JSON.stringify({
+                                                vehicle_model: form.elements.vehicle_model.value,
+                                                vehicle_brand: form.elements.vehicle_brand.value,
+                                                vehicle_type: form.elements.vehicle_type.value
+                                            })
+                                            const headers = {'Content-Type': 'application/json'}
+                                            fetch('/vehicle-model', { method: 'POST', body, headers})
+                                            .then(res => res.json())
+                                            .then(res => {
+                                                let paramRes = JSON.parse(res)
+                                                paramRes.allMessages.forEach(id => {
+                                                    let elem
+                                                    if (elem = document.getElementById(id)) elem.classList.add('hide')
+                                                })
+                                                if (paramRes.itisgood) {
+                                                    formModel.classList.add('hide')
+                                                    let tegs = ''
+                                                    paramRes.results.forEach((elem) => {
+                                                        tegs += `<option value='${elem.data_value}'>${elem.data_value}</option>\n`
+                                                    })
+                                                    optionECU.insertAdjacentHTML('afterend', tegs)
+                                                    selectedModel.innerHTML = form.elements.vehicle_model.value
+                                                    hiddenModleType.value = vehicleModelECU.value = form.elements.vehicle_model.value
+                                                    submitECU.classList.remove('hide')
+                                                    formECU.classList.remove('noevents')
+                                                    formECU.classList.remove('opacity')
+                                                    
+
+                                                    // ######
+                                                    formECU.addEventListener('submit', evt => {
+                                                        evt.preventDefault()
+                                                        const form = evt.target
+                                                        const body = JSON.stringify({
+                                                            vehicle_model: form.elements.vehicle_model.value,
+                                                            vehicle_brand: form.elements.vehicle_brand.value,
+                                                            vehicle_type: form.elements.vehicle_type.value,
+                                                            ecu: form.elements.ecu.value
+                                                        })
+                                                        const headers = {'Content-Type': 'application/json'}
+                                                        fetch('/ecu', { method: 'POST', body, headers})
+                                                        .then(res => res.json())
+                                                        .then(res => {
+                                                            let paramRes = JSON.parse(res)
+                                                            paramRes.allMessages.forEach(id => {
+                                                                let elem
+                                                                if (elem = document.getElementById(id)) elem.classList.add('hide')
+                                                            })
+                                                            if (paramRes.itisgood) {
+                                                                formECU.classList.add('hide')
+                                                                let tegsReadingDevice = ''
+                                                                paramRes.results.readingDevice.forEach(elem => {
+                                                                    tegsReadingDevice += `<option value='${elem.constant_value_value}'>${elem.constant_value_value}</option>\n`
+                                                                })
+                                                                optionReadingDevice.insertAdjacentHTML('afterend', tegsReadingDevice)
+                                                                let tegsPrice = ''
+                                                                let nameTag = 0
+                                                                paramRes.results.price.forEach(elem => {
+                                                                    tegsPrice += `<label class='block-checkboxes__block-checkbox block-checkbox'>
+                                                                        <input type='checkbox' name='serv_${++nameTag}' value='${elem.service_name}'>${elem.service_name}<span class='block-checkbox__price'>${elem.condition_service_price}</span>
+                                                                    </label>`
+                                                                })                                                                
+                                                                block_list_services.insertAdjacentHTML('afterbegin', tegsPrice)
+                                                                selectedUCU.innerHTML = form.elements.ecu.value
+                                                                hiddenECUtype.value = form.elements.ecu.value
+
+                                                                formTreatmentFile.classList.remove('noevents')
+                                                                formTreatmentFile.classList.remove('opacity')
+                                                                
+                                                                formTreatmentFile.addEventListener('submit', evt => {
+                                                                    evt.preventDefault()
+                                                                })
+                                                                submitTreatmentFile.addEventListener('click', () => {
+                                                                    const body = new FormData(evt.target)
+                                                                    fetch('/upload', {method: 'POST', body})
+                                                                    .then(res => {
+                                                                        if(res.status < 200 || res.status >= 300) {
+                                                                            throw new Error(`Request failed with status ${res.status}`)
+                                                                        }
+                                                                        return res.json()
+                                                                    })
+                                                                    .then(res => {
+                                                                        let paramRes = JSON.parse(res)
+                                                                        paramRes.allMessages.forEach(id => {
+                                                                            let elem
+                                                                            if (elem = document.getElementById(id)) elem.classList.add('hide')
+                                                                        })
+
+                                                                        if (paramRes.itisgood) {
+                                                                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/deal'
+                                                                            location.assign(url)
+                                                                        } else {
+                                                                            paramRes.messages.forEach(elem => {
+                                                                                document.getElementById(elem).classList.remove('hide')
+                                                                            })
+                                                                            formTreatmentFile.classList.remove('wait')
+                                                                            formTreatmentFile.classList.remove('opacity')
+                                                                        }
+                                                                    })
+                                                                    .catch(err => {
+                                                                        console.log(err)
+                                                                        // здесь должен быть переход на страницу, с сообщение об ошибке загрузки файла и предложением перейти на страницу создания сделки
+
+                                                                    })
+                                                                    // formTreatmentFile.submit() -- это скорее всего не нужно
+                                                                    formTreatmentFile.classList.add('wait')
+                                                                    formTreatmentFile.classList.add('opacity')
+                                                                })                                                                
+                                                                vehicleOriginalFile.addEventListener('change', function () {
+                                                                    const file = this.files[0];
+                                                                    const reader = new FileReader();
+                                                                    reader.readAsArrayBuffer(file);
+                                                                    reader.onload = function () {
+                                                                        let result = reader.result;
+                                                                        const view = new Uint8Array(result);
+                                                                        // сюда нужно добавить скрипт убирающий уведомление о превышении размера
+                                                                        !fileBiger.classList.contains('hide') && fileBiger.classList.add('hide')  
+                                                                        if (view.byteLength > 1024*1024) {
+                                                                            // сюда нужно добавить скрипт показывающий уведомление
+                                                                            fileBiger.classList.remove('hide')
+                                                                        } else {
+                                                                            checksum.value = crc16MODBUS(view);
+                                                                            submitTreatmentFile.classList.remove('hide')
+                                                                        }
+                                                                    }
+                                                                })
+                                                                let goAroundCheckboxes = function(fun) {
+                                                                    const listLabels = document.getElementById('block_list_services').childNodes;
+                                                                    for (let label in listLabels) {
+                                                                        if (listLabels.hasOwnProperty(label)) {
+                                                                            if (listLabels[label].nodeType == 1) {
+                                                                                for (let elem in listLabels[label].children) {
+                                                                                    let some = listLabels[label].children[elem]
+                                                                                    if (some?.localName === 'input' && some?.type === 'checkbox') {
+                                                                                        fun(some)
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                let sumTotal = function () {
+                                                                    let sum = 0;
+                                                                    goAroundCheckboxes(function (elem) {
+                                                                        if (elem.checked) {
+                                                                            sum += Number(elem.nextElementSibling.textContent);
+                                                                        }
+                                                                    });
+                                                                    document.getElementById("total-sum").innerHTML = sum;
+                                                                    document.getElementById('total-sum-input').setAttribute('value', sum);
+                                                                }
+                                                                let addEventCheckboxes = function(elem) {
+                                                                    elem.addEventListener('change', sumTotal);
+                                                                }
+                                                                
+                                                                goAroundCheckboxes(addEventCheckboxes)
+                                                            } else {
+                                                                paramRes.messages.forEach(elem => {
+                                                                    document.getElementById(elem).classList.remove('hide')
+                                                                })
+                                                                formECU.classList.remove('wait')
+                                                                formECU.classList.remove('opacity')
+                                                            }       
+                                                        })
+                                                        .catch(err => console.log(err))
+                                                        formECU.classList.add('wait')
+                                                        formECU.classList.add('opacity')
+                                                    })
+                                                } else {
+                                                    paramRes.messages.forEach((elem) => {
+                                                        document.getElementById(elem).classList.remove('hide') //didnt-choose-vehible-brand
+                                                    })
+                                                    formModel.classList.remove('wait')
+                                                    formModel.classList.remove('opacity')
+                                                }
+                                            })
+                                            .catch(err => console.log(err))
+                                            formModel.classList.add('wait')
+                                            formModel.classList.add('opacity')
+
+
+                                            // #####
+                                        })
+                                    } else {
+                                        paramRes.messages.forEach((elem) => {
+                                            document.getElementById(elem).classList.remove('hide') //didnt-choose-vehible-brand
+                                        })
+                                        formBrand.classList.remove('wait')
+                                        formBrand.classList.remove('opacity')
+                                    }
+                                })
+                                .catch(err => console.log(err))
+                                formBrand.classList.add('wait')
+                                formBrand.classList.add('opacity')
+
+                                //######
+                            })
+                        } else {
+                            paramRes.messages.forEach((elem) => {
+                                document.getElementById(elem).classList.remove('hide')
+                            })
+                            // submitForm.classList.remove('wait') 
+                            formVehicle.classList.remove('wait')
+                            formVehicle.classList.remove('opacity')
+                        }
+                    })
+                    .catch(err => console.log(err))
+                    // // submitForm.classList.add('wait') 
+                    // let button
+                    // if (button = document.getElementById('profile-form__submit')) button.classList.add('wait') 
+                    formVehicle.classList.add('wait')
+                    formVehicle.classList.add('opacity')
+                });
             }
         }
     })

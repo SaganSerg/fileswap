@@ -1,0 +1,145 @@
+<article class="main__content content content_choice-file" id="select-file">
+    <div class="content__block-selected-file block-selected-file">
+        <div class="block-selected-file__property">{{{vehicle_type_title}}} - <span class="block-selected-file__value"
+                id="selected-type">{{{not_selected}}}</span></div>
+        <div class="block-selected-file__property">{{{vehicle_brand_title}}} - <span
+                class="block-selected-file__value" id="selected-brand">{{{not_selected}}}</span></div>
+        <div class="block-selected-file__property">{{{vehicle_model_title}}} - <span
+                class="block-selected-file__value" id="selected-model">{{{not_selected}}}</span></div>
+        <div class="block-selected-file__property">{{{selected_ECU_title}}} - <span class="block-selected-file__value"
+                id="selected-ecu">{{{not_selected}}}</span></div>
+    </div>
+    <form class='content__wrapper-blocks relative{{!-- wait opacity --}}' id='form-choose-vehicle'>
+        <div class="submit_contentText"></div>
+        <div class="content__block-select-file block-select-file" id="block-vehicle-type">
+
+            <label class="block-select-file__block">{{{vehicle_type_title}}}
+                <div class='profile-input-block__message hide' id="didnt-choose-vehible-type">{{you_didnt_choose_anything}}</div>
+                <select class="block-select-file__select" id="vehicle-type" name="vehicle_type">
+                    <option disabled selected value='initial-state'>{{{select_vehicle_type}}}</option>
+                    {{#each vehicle_type}}
+                        <option value='{{value}}'>{{title}}</option>
+                    {{/each}}
+                </select>
+            </label>
+            <input class="block-select-file__button button button_next" type='submit' value="{{{further}}}" id="submitVehicle">
+        </div>
+
+    </form>
+    <form class='content__wrapper-blocks relative opacity noevents' id="form-choose-brand">
+        <div class="submit_contentText"></div>
+        <div class="content__block-select-file block-select-file">
+
+            <label class="block-select-file__block">Бренд транспортного средства
+                <div class='profile-input-block__message hide' id="didnt-choose-vehible-brand">{{you_didnt_choose_anything}}</div>
+                <select class="block-select-file__select" name="vehicle_brand">
+                    <option disabled selected value='initial-state' id="optionBrand">Выберите брэнд транспортного средства
+                    </option>
+                </select>
+            </label>
+            <input type='hidden' name='vehicle_type' id="vehicle_type_brand">
+            <input class="block-select-file__button button button_next hide" type="submit" value="Далее" id="submitBrand">
+        </div>
+    </form>
+    <form class='content__wrapper-blocks relative opacity noevents' id="form-choose-model">
+        <div class="submit_contentText"></div>
+        <div class="content__block-select-file block-select-file">
+
+            <label class="block-select-file__block">Модель транспортного средства
+                <div class='profile-input-block__message hide' id="didnt-choose-vehible-model">{{you_didnt_choose_anything}}</div>
+                <select class="block-select-file__select" name="vehicle_model">
+                    <option disabled selected value='initial-state' id="optionModel">Выберите модель транспортного средства
+                    </option>
+                </select>
+            </label>
+            <input type='hidden' name='vehicle_type' id="vehicle_type_model">
+            <input type='hidden' name='vehicle_brand' id="vehicle_brand_model">
+            <input class="block-select-file__button button button_next hide" type="submit" value="Далее" id="submitModel">
+        </div>
+    </form>
+    <form class='content__wrapper-blocks relative opacity noevents' id="form-choose-ecu">
+        <div class="submit_contentText"></div>
+        <div class="content__block-select-file block-select-file" id="block-vehicle-type">
+
+            <label class="block-select-file__block">ECU
+                <div class='profile-input-block__message hide' id="didnt-choose-vehible-ecu">{{you_didnt_choose_anything}}</div>
+                <select class="block-select-file__select" name="ecu">
+                    <option disabled selected value='initial-state' id="optionECU">Выберите ECU</option>
+                </select>
+            </label>
+            <input type='hidden' name='vehicle_type' id="vehicle_type_ecu">
+            <input type='hidden' name='vehicle_brand' id="vehicle_brand_ecu">
+            <input type='hidden' name='vehicle_model' id="vehicle_model_ecu">
+            <input class="block-select-file__button button button_next hide" type="submit" value="Далее" id="submitECU">
+        </div>
+    </form>
+    <form class='content__wrapper-blocks relative opacity noevents' id='form_treatment_file'>
+                <div class="submit_contentText"></div>
+                <div class="content__block-select-options block-select-options" id="block-select-options">
+                    <div class="block-select-options__option">
+                        <label class="block-select-options__block">Плата транспортного средства (опционально)
+                            <input id="plate-vehicle" type="text" placeholder="00 XXX 00" name="plate_vehicle">
+                        </label>
+                    </div>
+
+                    <div class="block-select-options__option">
+                        <label class="block-select-options__block">VIN идентификационный номер транспортного средства
+                            (опционально)
+                            <input id="vin-vehicle-identification-number" type="text" placeholder="0000-xxxx-0000-xxxx"
+                                name="vin">
+                        </label>
+                    </div>
+
+
+                    <div class="block-select-options__option">
+                        <label class="block-select-options__block" for="reading-device">Считывающее устройство
+                            <select id="reading-device" name="reading_device">
+                                <option disabled selected value='initial-state' id="optionReadingDevice">Выберите считывающее устройство</option>
+                                
+                            </select>
+                        </label>
+                    </div>
+
+
+
+                    <div class="block-select-options__option">
+                        <div class='profile-input-block__message hide' id="file-not-uploaded">файл не загрузился. Попробуйте еще раз</div>
+                        <div class='profile-input-block__message hide' id="file-biger">файл слишком большой</div>
+                        <label class="block-select-options__block" for="vehicle-original-file">Оригинальный файл
+                            транспортного средства (Обязательно)
+                            {{!-- <input type="hidden" name="MAX_FILE_SIZE" value="10485760"> --}}
+                            <input id="vehicle-original-file" type="file" name="original_file">
+                        </label>
+                    </div>
+
+
+                    <div class="block-select-options__block-checkboxes block-checkboxes" id="block_list_services">
+
+                       
+
+                    </div>
+                    <div class="block-select-options__total-sum total-sum-block">
+                        <p class="total-sum-block__text">Итоговая сумма в коинах: <span class="total-sum-block__sum"
+                                id="total-sum">0</span></p>
+                        <input type="hidden" name="total_sum" value="0" id="total-sum-input">
+                    </div>
+                    <div class="block-select-options__comment">
+                        <textarea name="comment" placeholder="Если есть вопросы -- пишите!"></textarea>
+                    </div>
+                </div>
+                <input type='hidden' name='vehicle_type' id="hiddenVehicleType">
+                <input type='hidden' name='vehicle_brand' id="hiddenBrandType">
+                <input type='hidden' name='vehicle_model' id="hiddenModleType">
+                <input type='hidden' name='ecu' id="hiddenECUtype">
+
+                <input id="checksum" type="hidden" name="checksum">
+                {{!-- <input type='hidden' name='lang' value='ru'>
+                <input type='hidden' name="Page" value='/allparameters'> --}}
+                <input type='hidden' name='ServiceSet' value='SCR-off, DTC-off, Power'>
+                <div id='submit-file' class='button button_form hide'>Отправить</div>
+            </form>
+    
+    <a class="normal-link-nolang__input block-select-file__button button button_back">сбросить</a>
+</article>
+
+    
