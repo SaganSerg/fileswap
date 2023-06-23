@@ -1,0 +1,112 @@
+
+        <h1 class='provider-main__title'>В работу</h1>
+        <div class='provider-main__article provider-article'>
+            <div class='provider-article__element provider-deals'>
+                <h2 class='provider-deals__main-title'>Сделки, за которыми нет закрепленного сотрудника</h2>
+
+                <h3 class='provider-deals__title'>Неоплаченные</h3>
+                <ul class='provider-deals__deals-list'>
+                {{#each customerOrdersUnpaidArr}}
+                    <li class='providel-deals__deals-list-element'>
+                        <a href='/deal/{{../providerId}}/{{customer_order_id}}'
+                            class="normal-link-provider provider-deal normal-link-provider__button provider-deal">ID
+                            клиента -- {{customer_id}}.ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                {{/each}}
+                </ul>
+                <h3 class='provider-deals__title'>Оплаченные</h3>
+                <ul class='provider-deals__deals-list'>
+                {{#each customerOrdersPaidArr}}
+                    <li class='providel-deals__deals-list-element'>
+                        <a href='/deal/{{../providerId}}/{{customer_order_id}}'
+                            class="normal-link-provider provider-deal normal-link-provider__button provider-deal">ID
+                            клиента -- {{customer_id}}. ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                {{/each}}
+                </ul>
+                <h3 class='provider-deals__title'>В которых есть непросмотренное сообщение</h3>
+                <ul class='provider-deals__deals-list'>
+                {{#each notMessageSeenDealsProviderWithout}}
+                    <li class='providel-deals__deals-list-element'>
+                        <a href='/deal/{{../providerId}}/{{customer_order_id}}'
+                            class="normal-link-provider provider-deal normal-link-provider__button provider-deal">ID
+                            клиента -- {{customer_id}}. ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                {{/each}}
+                </ul>
+            </div>
+
+            <div class='provider-article__element provider-deals'>
+                <h2 class='provider-deals__main-title'>Ваши сделки</h2>
+                <h3 class='provider-deals__title'>Неоплаченные</h3>
+                <ul class='provider-deals__deals-list'>
+                {{#each customerOrderUpaidWithProvider}}
+                    <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="/deal/{{../providerId}}/{{customer_order_id}}">D клиента
+                            -- {{customer_id}}. ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                    {{!-- <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="">D клиента
+                            -- 1. ID сделки -- 2.</a>
+                    </li> --}}
+                {{/each}}
+                </ul>
+                <h3 class='provider-deals__title'>Оплаченные</h3>
+                <ul class='provider-deals__deals-list'>
+                {{#each customerOrderPaidWithPrivider}}
+                    <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="/deal/{{../providerId}}/{{customer_order_id}}">D клиента
+                            -- {{customer_id}}. ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                    {{!-- <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="">D клиента
+                            -- 1. ID сделки -- 2.</a>
+                    </li> --}}
+                {{/each}}
+                </ul>
+                <h3 class='provider-deals__title'>В которых есть непросмотренные сообщения</h3>
+                <ul class='provider-deals__deals-list'>
+                {{#each notMessageSeenDealsProviderWith}}
+                    <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="/deal/{{../providerId}}/{{customer_order_id}}">D клиента
+                            -- {{customer_id}}. ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                    {{!-- <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="">D клиента
+                            -- 1. ID сделки -- 2.</a>
+                    </li> --}}
+                {{/each}}
+                    
+                </ul>
+                <h3 class='provider-deals__title'>В работе</h3>
+                <ul class='provider-deals__deals-list'>
+                    {{#each beingDoneDealsProviderWith}}
+                    <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="/deal/{{../providerId}}/{{customer_order_id}}">D клиента
+                            -- {{customer_id}}. ID сделки -- {{customer_order_id}}.</a>
+                    </li>
+                    {{!-- <li class='providel-deals__deals-list-element'>
+                        
+                        <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal"
+                            href="">D клиента
+                            -- 1. ID сделки -- 2.</a>
+                    </li> --}}
+                {{/each}}
+                </ul>
+            </div>
+        </div>
+    

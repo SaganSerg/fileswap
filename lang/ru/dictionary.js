@@ -86,5 +86,17 @@ exports.dictionary = {
     car: 'Автомобиль',
     morine: 'Судно',
     further: 'Далее',
-    you_didnt_choose_anything:"Вы ничего не выбрали"
+    you_didnt_choose_anything:"Вы ничего не выбрали",
+    // deal
+    vehicle_type: 'Тип транспортного средства',
+    vehicle_brand: 'Бренд транспортного средства',
+    vehicle_model: 'Модель транспортного средства',
+    ecu: 'ECU',
+    reading_device: 'Считывающее устройство',
+    plate_vehicle: 'Плата транспортного средства',
+    vin: 'VIN',
+    paid: 'оплачено',
+    being_done: 'в работе',
+    unpaid: 'не оплачено', 
+    done: 'сделоно'
 }

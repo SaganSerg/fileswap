@@ -1,0 +1,52 @@
+
+        <h1 class='provider-main__title'>Выбрать Ваши сделки</h1>
+        <div class="provider-gate__block-message"></div>
+        <form class="provider-form-search" method="POST" action="/deals/{{provider_id}}">
+            {{!-- <input type="hidden" name="provider_id" value="{{provider_id}}"> --}}
+            <fieldset class="provider-form-search__inputs-block provider-inputs-block">
+                <legend class="provider-inputs-block__title">Диапазон времени</legend>
+                <input class="provider-inputs-block__input" type='date' name='datestart'>
+                <input class="provider-inputs-block__input" type='date' name='dateend'>
+            </fieldset>
+            <fieldset class="provider-form-search__inputs-block provider-inputs-block">
+                <legend class='provider-inputs-block__title'>Id клиента</legend>
+                <input class="provider-inputs-block__input" type='number' name='customer_id'>
+            </fieldset>
+            <fieldset class="provider-form-search__inputs-block provider-inputs-block">
+                <legend class='provider-inputs-block__title'>Статус сделки</legend>
+                <select class='provider-inputs-block__select-block provider-select-block' name='customer_order_status[]'
+                    multiple>
+                    <option class="provider-select-block__option" value="paid">Оплачена</option>
+                    <option class="provider-select-block__option" value="being_done">В работе</option>
+                    <option class="provider-select-block__option" value="unpaid">Не оплачена</option>
+                    <option class="provider-select-block__option" value="done">Выполнена</option>
+                </select>
+            </fieldset>
+            <input class="provider-form-search__submit" type="submit" value="Ваши сделки">
+        </form>
+        {{!-- <div class="provider-form-search">
+            <a class="provider-form-search__submit" href="">Все Ваши сделки</a>
+        </div> --}}
+        
+        <div class="provider-deals">
+            <h2 class="provider-main__title">Ваши сделки</h2>
+            <ul class='provider-deals__deals-list'>
+            {{#each customerOrderArr}}
+                <li class='providel-deals__deals-list-element'>
+                    <a href='/deal/{{customer_order_id}}' class="normal-link-provider provider-deal normal-link-provider__button provider-deal">ID клиента -- {{customer_id}}.
+                        ID сделки -- {{customer_order_id}}.
+                        сумма сделки -- {{customer_order_amount}} коин.
+                        дата регистрации сделки -- {{customer_order_date}}.
+                        cтатус сделки -- {{customer_order_status}}</a>
+                </li>
+                {{!-- <li class='providel-deals__deals-list-element'>
+                    <a class="normal-link-provider provider-deal normal-link-provider__button provider-deal">ID клиента -- 1.
+                        ID сделки -- 2.
+                        сумма сделки -- 300.
+                        дата регистрации сделки -- 1669364714.
+                        cтатус сделки -- paid</a>
+                </li> --}}
+            {{/each}}
+            </ul>
+        </div>
+    

@@ -1,0 +1,52 @@
+       
+        Регистрация
+        <form class="provider-gate-form" method="POST" action='' id="formRegistration">
+            <div class="provider-gate-form__label">Логин</div>
+            <input class='provider-gate-form__input' type='text' name='username' required>
+            <div class="provider-gate-form__label">Пароль</div>
+            <input class='provider-gate-form__input' type='text' name='password' required>
+             <div class="provider-gate-form__label">Имя</div>
+            <input class='provider-gate-form__input' type='text' name='firstname' required>
+            <div class="provider-gate-form__label">Фамилия</div>
+            <input class='provider-gate-form__input' type='text' name='secondname' required>
+            <div class="provider-gate-form__label">Статус</div>
+            <select class='provider-gate-form__input' name='status' required size="1">
+                <option>engineer</option>
+                <option>manager</option>
+            </select>
+            <input class="provider-gate-form__submit" type='submit' value='Регистрация'>
+        </form>
+        <div id="message"></div>
+ <script>
+            let sult = Math.floor(Number(new Date())/100000)
+        let url = 'http://admin.simple.loc:3000/signup/' + '8293af6f69a2a199f8d84867bf5e1276ef54cff79f3acd055d0f1936b067bb2b93e3f1c609b1b51' + sult
+        document.getElementById('formRegistration').addEventListener('submit', (evt) => {
+            evt.preventDefault()
+            const form = evt.target
+                    const body = JSON.stringify({
+                        username: form.elements.username.value + '_employee',
+                        password: form.elements.password.value,
+                        firstname: form.elements.firstname.value,
+                        secondname: form.elements.secondname.value,
+                        status: form.elements.status.value
+                    })
+                    const headers = { 'Content-Type': 'application/json' }
+                    let message = document.getElementById('message')
+                    fetch(url, {method: 'POST', body, headers})
+                    .then(res => res.json())
+                    .then(res => {
+                        let paramRes = JSON.parse(res);
+                       
+                        if (paramRes.itisgood) {
+                            message.innerHTML = paramRes.message
+                        } else {
+                            message.innerHTML = paramRes.message
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        message.innerHTML = paramRes.message
+                    })
+        })
+        </script>
+   

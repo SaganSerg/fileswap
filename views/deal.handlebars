@@ -1,0 +1,72 @@
+<article class="main__content content content_deal relative {{!-- wait opacity --}}" id="deal">
+    <div class="submit_contentText"></div>
+            <h1 class='content__title'>Это ваша сделка</h1>
+            <ul class='content__deal-parameters deal-parameters'>
+                <li class='deal-parameters__parameter deal-parameter deal-parameter_sum'>Сумма сделки - <span
+                        class='deal-parameter__value deal-parameter__value_sum'>{{orderStatus.customer_order_amount}}</span> коинов</li>
+                <li class='deal-parameters__parameter deal-parameter deal-parameter_date'>Дата регистрации сделки -
+                    <span class='deal-parameter__value deal-parameter__value_date'>{{orderStatus.customer_order_date}}</span>
+                </li>
+                <li class='deal-parameters__parameter deal-parameter deal-parameter_status'>Статус сделки - <span id="status"
+                        class='deal-parameter__value deal-parameter__value_status'>{{orderStatus.customer_order_status}}</span>
+                        
+        <form id='pay' class='normal-link-nolang {{#unless showPayButton}} hide {{/unless}}'>
+            <input type="hidden" name="orderId" value="{{orderStatus.customer_order_id}}">
+            <input type="hidden" name="sum" value="{{orderStatus.customer_order_amount}}">
+            <input class="normal-link-nolang__input deal-parameter__button-pay button deal-button-pay" type="submit" value="Оплатить">
+            {{!-- <div id='notEnaughtCoins' class='notificaiton-not-enough-coins deal-parameter__notifacation-not-enough-coins hide'>You do not have enough coins to pay for the service. You need to buy coins.</div> --}}
+        </form>
+        <div id='notEnaughtCoins' class='notificaiton-not-enough-coins deal-parameter__notifacation-not-enough-coins {{#unless showNoEnoughtMoney}} hide {{/unless}}'>You do not have enough coins to pay for the service. You need to buy coins.</div>
+                </li>
+            </ul>
+
+            <ul class='content__order-parameters order-parameters'>
+            {{#each orderData}}
+                <li class='order-parameters__parameter order-parameter'>{{customer_order_data_name}} - <span
+                        class='order-parameter__value'>{{customer_order_data_value}}</span>
+                </li>
+            {{/each}}
+            </ul>
+            <h2 class='content__order-services-title'>
+                Заказанные услуги
+            </h2>
+            <ul class='content__order-services order-services'>
+            {{#each serviceName}}
+                <li class='order-services__service order-service'>{{service_name}}</li>
+            {{/each}}
+            </ul>
+            
+            <h2 class='content__order-messages-title'>
+                Переписка
+            </h2>
+            <ul id='messages' class='content__order-messages order-messages'>
+            {{#each messages}}
+                <li class='{{message_from}}-message {{#if message_seen}}  provider-message_not-seen {{/if}} order-messages__message order-message'>
+                    <div class='order-message__date'>{{message_date }}</div>
+                    <div class='order-message__content'>{{message_content}}</div>
+                </li>
+            {{/each}}
+                <li class='order-messages__message order-textarea'>
+                    <form class='order-textarea__form' id="sendComment">
+                        <input type="hidden" value="{{orderStatus.customer_order_id}}" name="orderId">
+                        <textarea class='order-textarea__this' name='comment'
+                            placeholder='Если есть вопросы - пишите!'></textarea>
+                       
+
+                        <input class="order-textarea__submit" type="submit" value="Отправить">
+                    </form>
+                    {{!-- <form class='order-textarea__form' id="getNewMessage">
+                        <input type='hidden' value='ru' name='lang' class='' placeholder=''>
+                        <input type='hidden' value='/dealsdeal' name='Page' class='' placeholder=''>
+
+                        <input class="order-textarea__submit" type="submit" value="Проверить новые сообщения">
+                    </form> --}}
+                    <a class='order-textarea__form order-textarea__submit' href="/{{{langPath}}}/deal/{{orderStatus.customer_order_id}}" id="getNewMessage">Проверить новые сообщения</a>
+                </li>
+            </ul>
+            <a href="/{{{langPath}}}download?id={{orderStatus.customer_order_id}}" id='download' class='content__form-button form-button form-button__button {{#unless showDownloadFileLink}} hide {{/unless}}'>Скачать файл</a>
+        </article>
+
+      
+
+       

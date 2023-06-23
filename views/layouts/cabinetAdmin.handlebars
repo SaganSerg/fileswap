@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html class="document" lang="ru">
+
+<head>
+    <meta name="yandex-verification" content="7f395c22ce58ae44" />
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рабочая область</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+
+<body class="provider-page">
+
+     <form class="normal-link" method="post" action="/logout">
+            <button class="normal-link__input page__exit exit" type="submit">Выйти</button>
+        </form>
+
+
+    <header class="provider-header">
+       <div class="provider-name">{{providerName}}</div>
+        <ul class="provider-main-menu">
+            {{!-- <li class='provider-main-menu__element'>
+                <a href="//deals/:id" class='normal-link-provider in-header normal-link-provider__button'>Админка</a>
+            </li>
+            <li class='provider-main-menu__element'>
+                <a href="/" class='normal-link-provider in-header normal-link-provider__button'>Сделки</a>
+            </li> --}}
+            <li class='provider-main-menu__element'>
+                <a class="normal-link-provider in-header normal-link-provider__button in-header provider-normal-link__button_not-active"
+                    href='/admin/{{providerId}}'>Админка</a>
+            </li>
+            <li class='provider-main-menu__element'>
+                <a class="normal-link-provider in-header normal-link-provider__button in-header provider-normal-link__button_not-active"
+                    href='/deals/{{providerId}}'>Сделки</a>
+            </li>
+        </ul>
+    </header>
+    <main class="provider-main">
+{{{body}}}
+        </main>
+    <footer class="provider-footer">
+
+    </footer>
+    <script src=""></script>
+</body>
+
+</html>

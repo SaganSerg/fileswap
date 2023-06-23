@@ -1,0 +1,11 @@
+<article class="main__content content content_history">
+    <h1 class="content__title">Список транзакций</h1>
+    <ul class='content__transactions transactions'>
+        {{#each dealDataArr}}
+        <li class='transactions__transaction transaction'>
+            <div class='transaction__time'>Время транзакции <span class='transaction__time-value'>{{coin_transaction_date}}</span></div>
+            <div class='transaction__sum'>Сумма транзакции <span class='transaction__sum-value'>{{coin_transaction_sum}}</span></div>
+        </li>
+        {{/each}}
+    </ul>
+</article>

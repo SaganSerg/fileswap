@@ -33,7 +33,7 @@
             <label class="block-select-file__block">Бренд транспортного средства
                 <div class='profile-input-block__message hide' id="didnt-choose-vehible-brand">{{you_didnt_choose_anything}}</div>
                 <select class="block-select-file__select" name="vehicle_brand">
-                    <option disabled selected value='initial-state' id="optionBrand">Выберите брэнд транспортного средства
+                    <option {{!-- disabled --}} selected value='initial-state' id="optionBrand">Выберите брэнд транспортного средства
                     </option>
                 </select>
             </label>
@@ -48,7 +48,7 @@
             <label class="block-select-file__block">Модель транспортного средства
                 <div class='profile-input-block__message hide' id="didnt-choose-vehible-model">{{you_didnt_choose_anything}}</div>
                 <select class="block-select-file__select" name="vehicle_model">
-                    <option disabled selected value='initial-state' id="optionModel">Выберите модель транспортного средства
+                    <option  {{!-- disabled --}}  selected value='initial-state' id="optionModel">Выберите модель транспортного средства
                     </option>
                 </select>
             </label>
@@ -59,12 +59,12 @@
     </form>
     <form class='content__wrapper-blocks relative opacity noevents' id="form-choose-ecu">
         <div class="submit_contentText"></div>
-        <div class="content__block-select-file block-select-file" id="block-vehicle-type">
+        <div class="content__block-select-file block-select-file" id="block-ecu">
 
             <label class="block-select-file__block">ECU
                 <div class='profile-input-block__message hide' id="didnt-choose-vehible-ecu">{{you_didnt_choose_anything}}</div>
                 <select class="block-select-file__select" name="ecu">
-                    <option disabled selected value='initial-state' id="optionECU">Выберите ECU</option>
+                    <option  {{!-- disabled --}}  selected value='initial-state' id="optionECU">Выберите ECU</option>
                 </select>
             </label>
             <input type='hidden' name='vehicle_type' id="vehicle_type_ecu">
@@ -73,11 +73,12 @@
             <input class="block-select-file__button button button_next hide" type="submit" value="Далее" id="submitECU">
         </div>
     </form>
-    <form class='content__wrapper-blocks relative opacity noevents' id='form_treatment_file'>
+    <form class='content__wrapper-blocks relative opacity noevents' id='form_treatment_file' method="post" enctype="multipart/form-data">
                 <div class="submit_contentText"></div>
                 <div class="content__block-select-options block-select-options" id="block-select-options">
                     <div class="block-select-options__option">
                         <label class="block-select-options__block">Плата транспортного средства (опционально)
+                            <div class='profile-input-block__message hide' id="something-wrong-plata-vehicle">Что-то Вы неправильно указали</div>
                             <input id="plate-vehicle" type="text" placeholder="00 XXX 00" name="plate_vehicle">
                         </label>
                     </div>
@@ -85,6 +86,7 @@
                     <div class="block-select-options__option">
                         <label class="block-select-options__block">VIN идентификационный номер транспортного средства
                             (опционально)
+                            <div class='profile-input-block__message hide' id="something-wrong-vin">Что-то Вы неправильно указали</div>
                             <input id="vin-vehicle-identification-number" type="text" placeholder="0000-xxxx-0000-xxxx"
                                 name="vin">
                         </label>
@@ -93,8 +95,9 @@
 
                     <div class="block-select-options__option">
                         <label class="block-select-options__block" for="reading-device">Считывающее устройство
+                            <div class='profile-input-block__message hide' id="didnt-choose-reading-device">{{you_didnt_choose_anything}}</div>
                             <select id="reading-device" name="reading_device">
-                                <option disabled selected value='initial-state' id="optionReadingDevice">Выберите считывающее устройство</option>
+                                <option  {{!-- disabled --}} selected value='initial-state' id="optionReadingDevice">Выберите считывающее устройство</option>
                                 
                             </select>
                         </label>
@@ -108,15 +111,12 @@
                         <label class="block-select-options__block" for="vehicle-original-file">Оригинальный файл
                             транспортного средства (Обязательно)
                             {{!-- <input type="hidden" name="MAX_FILE_SIZE" value="10485760"> --}}
-                            <input id="vehicle-original-file" type="file" name="original_file">
+                            <input id="vehicle-original-file" type="file" name="original_file"> 
                         </label>
                     </div>
 
-
+                    <div class='profile-input-block__message hide' id="didnt-choose-services">{{you_didnt_choose_anything}}</div>
                     <div class="block-select-options__block-checkboxes block-checkboxes" id="block_list_services">
-
-                       
-
                     </div>
                     <div class="block-select-options__total-sum total-sum-block">
                         <p class="total-sum-block__text">Итоговая сумма в коинах: <span class="total-sum-block__sum"
@@ -131,12 +131,13 @@
                 <input type='hidden' name='vehicle_brand' id="hiddenBrandType">
                 <input type='hidden' name='vehicle_model' id="hiddenModleType">
                 <input type='hidden' name='ecu' id="hiddenECUtype">
+                <input type="hidden" name="services_number" id="servicesNumber">
 
                 <input id="checksum" type="hidden" name="checksum">
                 {{!-- <input type='hidden' name='lang' value='ru'>
                 <input type='hidden' name="Page" value='/allparameters'> --}}
-                <input type='hidden' name='ServiceSet' value='SCR-off, DTC-off, Power'>
-                <div id='submit-file' class='button button_form hide'>Отправить</div>
+                {{!-- <input type='hidden' name='ServiceSet' value='SCR-off, DTC-off, Power'> --}}
+                <button type="submit" id='submit-file' class='button button_form hide'>Отправить</button>
             </form>
     
     <a class="normal-link-nolang__input block-select-file__button button button_back">сбросить</a>

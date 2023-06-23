@@ -86,5 +86,17 @@ exports.dictionary = {
     car: 'Car',
     morine: 'Vessel',
     further: 'Further',
-    you_didnt_choose_anything: "You didn't choose anything"
+    you_didnt_choose_anything: "You didn't choose anything",
+    // deal
+    vehicle_type: 'Vehicle type',
+    vehicle_brand: 'Vehicle brand',
+    vehicle_model: 'Vehicle model',
+    ecu: 'ECU',
+    reading_device: 'Reading device',
+    plate_vehicle: 'Plate vehicle',
+    vin: 'VIN',
+    paid: 'paid',
+    being_done: 'being_done',
+    unpaid: 'unpaid', 
+    done: 'done'
 }

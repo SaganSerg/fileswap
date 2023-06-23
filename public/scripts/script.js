@@ -1,4 +1,6 @@
 "use strict";
+const wrongUrl = 'http://simple.loc:3000/wrong'
+const fileIsNotUpload = 'http://simple.loc:3000/fileisnotupload'
 function makeReq(url, fun, method = 'GET' ) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
@@ -18,7 +20,29 @@ const processRequest = async (url, fun, catchFun, method) => {
     }
     
 }
-
+function fileDownloadinChecksumProvider()
+{
+    if ($elem = document.getElementById('downloading-file')) {
+        $elem.addEventListener('change', function() {
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = function () {
+                var result = reader.result;
+                var view = new Uint8Array(result);
+                let checksumOnServer = document.getElementById('downloading-file-checksum').textContent;
+                let checksumOnClient = crc16MODBUS(view);
+                if (checksumOnServer === 'No file') {
+                    document.getElementById('downloading-file-no-file').classList.remove('hide');
+                } else if (checksumOnServer == checksumOnClient) {
+                    document.getElementById('downloading-file-checksum-message-ok').classList.remove('hide');
+                } else {
+                    document.getElementById('downloading-file-checksum-message-trouble').classList.remove('hide');
+                }
+            }
+        });
+    }
+}
 function crc16MODBUS(string){
     var CrcTable = [
         0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
@@ -118,6 +142,7 @@ function agreeToCookie(){
     }
 }
 (function(){
+    try {
     window.addEventListener('load', function(){
         agreeToCookie();
         (document.cookie.indexOf('agree=yes') !== -1) && putLangCookie()
@@ -178,7 +203,7 @@ function agreeToCookie(){
                         if (paramRes.itisgood) {
                             let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/buy-coin'
                             location.assign(url)
-                        } else {
+                        } else if (!paramRes.itisgood){
                             paramRes.allMessages.forEach(id => {
                                 let elem
                                 if (elem = document.getElementById(id)) elem.classList.add('hide')
@@ -187,9 +212,14 @@ function agreeToCookie(){
                                 document.getElementById(elem).classList.remove('hide')
                             })
                             sendButton.classList.remove('wait')
+                        } else {
+                            location.assign(wrongUrl)
                         }
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        console.log(err)
+                        location.assign(wrongUrl)
+                    })
                     sendButton.classList.add('wait')
                 })
             }
@@ -220,14 +250,19 @@ function agreeToCookie(){
                         if (paramRes.itisgood) {
                             let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/buy-coin'
                             location.assign(url)
-                        } else {
+                        } else if (!paramRes.itisgood){
                             paramRes.messages.forEach((elem) => {
                                 document.getElementById(elem).classList.remove('hide')
                             })
                             submitForm.classList.remove('wait') 
+                        } else {
+                            location.assign(wrongUrl)
                         }
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        console.log(err)
+                        location.assign(wrongUrl)
+                    })
                     submitForm.classList.add('wait') 
                 })
             }
@@ -279,16 +314,21 @@ function agreeToCookie(){
                             console.log('it is now')
                             let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/profile'
                             location.assign(url)
-                        } else {
+                        } else if (!paramRes.itisgood){
                             paramRes.messages.forEach((elem) => {
                                 document.getElementById(elem).classList.remove('hide')
                             })
                             // submitForm.classList.remove('wait') 
                             let button
                             if (button = document.getElementById('profile-form__submit')) button.classList.remove('wait') 
+                        } else {
+                            location.assign(wrongUrl)
                         }
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        console.log(err)
+                        location.assign(wrongUrl)
+                    })
                     // submitForm.classList.add('wait') 
                     let button
                     if (button = document.getElementById('profile-form__submit')) button.classList.add('wait') 
@@ -325,10 +365,10 @@ function agreeToCookie(){
             }
         }
         if (document.getElementById('select-file')) {
-            let formVehicle, submitVehicle, formBrand, submitBrand, formModel, submitModel, formECU, submitECU, formTreatmentFile, submitTreatmentFile, hiddenVehicleType, hiddenBrandType, hiddenModleType, hiddenECUtype, block_list_services, optionReadingDevice, optionBrand, optionModel, optionECU, selectedType, selectedBrand, selectedModel, selectedUCU, vehicleType, vehicleTypeBrand, vehicleTypeModel, vehicleBrandModel, vehicleTypeECU, vehicleBrandECU, vehicleModelECU, vehicleOriginalFile, checksum, fileNotUploaded, fileBiger
+            let formVehicle, submitVehicle, formBrand, submitBrand, formModel, submitModel, formECU, submitECU, formTreatmentFile, submitTreatmentFile, hiddenVehicleType, hiddenBrandType, hiddenModleType, hiddenECUtype, block_list_services, optionReadingDevice, optionBrand, optionModel, optionECU, selectedType, selectedBrand, selectedModel, selectedUCU, vehicleType, vehicleTypeBrand, vehicleTypeModel, vehicleBrandModel, vehicleTypeECU, vehicleBrandECU, vehicleModelECU, vehicleOriginalFile, checksum, fileNotUploaded, fileBiger, servicesNumber
             if (
                 (formVehicle = document.getElementById('form-choose-vehicle')) && 
-                (submitVehicle = document.getElementById('submitVehicle')) && 
+                (submitVehicle = document.getElementById('submitVehicle')) && // здесь
                 (formBrand = document.getElementById('form-choose-brand')) && 
                 (submitBrand = document.getElementById('submitBrand')) && 
                 (formModel = document.getElementById('form-choose-model')) && 
@@ -357,7 +397,7 @@ function agreeToCookie(){
 
                 (vehicleType = document.getElementById('vehicle-type')) &&
 
-                (vehicleTypeBrand = document.getElementById('vehicle_type_brand')) && // vehicle_type_brand
+                (vehicleTypeBrand = document.getElementById('vehicle_type_brand')) &&
 
                 (vehicleTypeModel = document.getElementById('vehicle_type_model')) &&
                 (vehicleBrandModel = document.getElementById('vehicle_brand_model')) &&
@@ -368,10 +408,11 @@ function agreeToCookie(){
 
 
                 (vehicleOriginalFile = document.getElementById('vehicle-original-file')) &&
-                (checksum = document.getElementById('checksum')) &&
+                (checksum = document.getElementById('checksum')) && // здесь
 
-                (fileNotUploaded =  document.getElementById('file-not-uploaded')) &&
-                (fileBiger = document.getElementById('file-biger'))
+                (fileNotUploaded =  document.getElementById('file-not-uploaded')) && // здесь
+                (fileBiger = document.getElementById('file-biger')) &&
+                (servicesNumber = document.getElementById('servicesNumber'))
 
 
             ) {
@@ -431,7 +472,6 @@ function agreeToCookie(){
                                         paramRes.results.forEach((elem) => {
                                             tegs += `<option value='${elem.data_value}'>${elem.data_value}</option>\n`
                                         })
-                                        console.log(paramRes)
                                         optionModel.insertAdjacentHTML('afterend', tegs)
                                         selectedBrand.innerHTML = form.elements.vehicle_brand.value
                                         hiddenBrandType.value = vehicleBrandModel.value = vehicleBrandECU.value = form.elements.vehicle_brand.value
@@ -499,11 +539,14 @@ function agreeToCookie(){
                                                                 optionReadingDevice.insertAdjacentHTML('afterend', tegsReadingDevice)
                                                                 let tegsPrice = ''
                                                                 let nameTag = 0
+                                                                let servicesNumberValue = 0
                                                                 paramRes.results.price.forEach(elem => {
                                                                     tegsPrice += `<label class='block-checkboxes__block-checkbox block-checkbox'>
                                                                         <input type='checkbox' name='serv_${++nameTag}' value='${elem.service_name}'>${elem.service_name}<span class='block-checkbox__price'>${elem.condition_service_price}</span>
                                                                     </label>`
-                                                                })                                                                
+                                                                    servicesNumberValue++
+                                                                })                
+                                                                servicesNumber.value = servicesNumberValue
                                                                 block_list_services.insertAdjacentHTML('afterbegin', tegsPrice)
                                                                 selectedUCU.innerHTML = form.elements.ecu.value
                                                                 hiddenECUtype.value = form.elements.ecu.value
@@ -513,54 +556,100 @@ function agreeToCookie(){
                                                                 
                                                                 formTreatmentFile.addEventListener('submit', evt => {
                                                                     evt.preventDefault()
-                                                                })
-                                                                submitTreatmentFile.addEventListener('click', () => {
                                                                     const body = new FormData(evt.target)
                                                                     fetch('/upload', {method: 'POST', body})
                                                                     .then(res => {
+                                                                        // console.log('this is first res from upload')
                                                                         if(res.status < 200 || res.status >= 300) {
+                                                                            console.log('errror 200')
                                                                             throw new Error(`Request failed with status ${res.status}`)
                                                                         }
+                                                                        // console.log('it is first res after upload')
                                                                         return res.json()
                                                                     })
                                                                     .then(res => {
+                                                                        // console.log('is is from second res upload')
                                                                         let paramRes = JSON.parse(res)
+                                                                        // console.log('before paramRes')
                                                                         paramRes.allMessages.forEach(id => {
                                                                             let elem
                                                                             if (elem = document.getElementById(id)) elem.classList.add('hide')
                                                                         })
-
+                                                                        // console.log('before itsigood') // cюда уж не попадает
                                                                         if (paramRes.itisgood) {
-                                                                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/deal'
+                                                                            // console.log('it is after the last request')
+                                                                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/deal/' + paramRes.customerOrderId
                                                                             location.assign(url)
-                                                                        } else {
+                                                                        } else if (paramRes.itisgood === false) {
                                                                             paramRes.messages.forEach(elem => {
                                                                                 document.getElementById(elem).classList.remove('hide')
                                                                             })
                                                                             formTreatmentFile.classList.remove('wait')
                                                                             formTreatmentFile.classList.remove('opacity')
+                                                                        } else {
+                                                                            location.assign(wrongUrl)
                                                                         }
                                                                     })
                                                                     .catch(err => {
-                                                                        console.log(err)
+                                                                        // console.log(err)
+                                                                        console.log('это из upload')
                                                                         // здесь должен быть переход на страницу, с сообщение об ошибке загрузки файла и предложением перейти на страницу создания сделки
-
+                                                                        location.assign(fileIsNotUpload)
                                                                     })
                                                                     // formTreatmentFile.submit() -- это скорее всего не нужно
                                                                     formTreatmentFile.classList.add('wait')
                                                                     formTreatmentFile.classList.add('opacity')
-                                                                })                                                                
+                                                                })
+                                                                // submitTreatmentFile.addEventListener('click', () => {
+                                                                //     const body = new FormData(evt.target)
+                                                                //     console.log(body)
+                                                                //     fetch('/upload', {method: 'POST', body})
+                                                                //     .then(res => {
+                                                                //         if(res.status < 200 || res.status >= 300) {
+                                                                //             throw new Error(`Request failed with status ${res.status}`)
+                                                                //         }
+                                                                //         return res.json()
+                                                                //     })
+                                                                //     .then(res => {
+                                                                //         let paramRes = JSON.parse(res)
+                                                                //         paramRes.allMessages.forEach(id => {
+                                                                //             let elem
+                                                                //             if (elem = document.getElementById(id)) elem.classList.add('hide')
+                                                                //         })
+
+                                                                //         if (paramRes.itisgood) {
+                                                                //             let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/deal'
+                                                                //             location.assign(url)
+                                                                //         } else if (paramRes.itisgood === false) {
+                                                                //             paramRes.messages.forEach(elem => {
+                                                                //                 document.getElementById(elem).classList.remove('hide')
+                                                                //             })
+                                                                //             formTreatmentFile.classList.remove('wait')
+                                                                //             formTreatmentFile.classList.remove('opacity')
+                                                                //         } else {
+                                                                //             location.assign(wrongUrl)
+                                                                //         }
+                                                                //     })
+                                                                //     .catch(err => {
+                                                                //         console.log(err)
+                                                                //         // здесь должен быть переход на страницу, с сообщение об ошибке загрузки файла и предложением перейти на страницу создания сделки
+
+                                                                //     })
+                                                                //     // formTreatmentFile.submit() -- это скорее всего не нужно
+                                                                //     formTreatmentFile.classList.add('wait')
+                                                                //     formTreatmentFile.classList.add('opacity')
+                                                                // })                                                                
                                                                 vehicleOriginalFile.addEventListener('change', function () {
                                                                     const file = this.files[0];
+                                                                    
                                                                     const reader = new FileReader();
                                                                     reader.readAsArrayBuffer(file);
                                                                     reader.onload = function () {
                                                                         let result = reader.result;
                                                                         const view = new Uint8Array(result);
-                                                                        // сюда нужно добавить скрипт убирающий уведомление о превышении размера
                                                                         !fileBiger.classList.contains('hide') && fileBiger.classList.add('hide')  
+                                                                        !submitTreatmentFile.classList.contains('hide') && submitTreatmentFile.classList.add('hide')
                                                                         if (view.byteLength > 1024*1024) {
-                                                                            // сюда нужно добавить скрипт показывающий уведомление
                                                                             fileBiger.classList.remove('hide')
                                                                         } else {
                                                                             checksum.value = crc16MODBUS(view);
@@ -598,57 +687,77 @@ function agreeToCookie(){
                                                                 }
                                                                 
                                                                 goAroundCheckboxes(addEventCheckboxes)
-                                                            } else {
+                                                            } else if (paramRes.itisgood === false){
                                                                 paramRes.messages.forEach(elem => {
                                                                     document.getElementById(elem).classList.remove('hide')
                                                                 })
                                                                 formECU.classList.remove('wait')
                                                                 formECU.classList.remove('opacity')
+                                                            } else {
+                                                                location.assign(wrongUrl)
                                                             }       
                                                         })
-                                                        .catch(err => console.log(err))
+                                                        .catch(err => {
+                                                            console.log(err)
+                                                            location.assign(wrongUrl)
+                                                        })
                                                         formECU.classList.add('wait')
                                                         formECU.classList.add('opacity')
                                                     })
-                                                } else {
+                                                } else if (paramRes.itisgood === false){
                                                     paramRes.messages.forEach((elem) => {
                                                         document.getElementById(elem).classList.remove('hide') //didnt-choose-vehible-brand
                                                     })
                                                     formModel.classList.remove('wait')
                                                     formModel.classList.remove('opacity')
+                                                } else {
+                                                    location.assign(wrongUrl)
                                                 }
                                             })
-                                            .catch(err => console.log(err))
+                                            .catch(err => {
+                                                console.log(err)
+                                                location.assign(wrongUrl)
+                                            })
                                             formModel.classList.add('wait')
                                             formModel.classList.add('opacity')
 
 
                                             // #####
                                         })
-                                    } else {
+                                    } else if (paramRes.itisgood === false){
                                         paramRes.messages.forEach((elem) => {
                                             document.getElementById(elem).classList.remove('hide') //didnt-choose-vehible-brand
                                         })
                                         formBrand.classList.remove('wait')
                                         formBrand.classList.remove('opacity')
+                                    } else {
+                                        location.assign(wrongUrl)
                                     }
                                 })
-                                .catch(err => console.log(err))
+                                .catch(err => {
+                                    console.log(err)
+                                    location.assign(wrongUrl)
+                                })
                                 formBrand.classList.add('wait')
                                 formBrand.classList.add('opacity')
 
                                 //######
                             })
-                        } else {
+                        } else if (paramRes.itisgood === false){
                             paramRes.messages.forEach((elem) => {
                                 document.getElementById(elem).classList.remove('hide')
                             })
                             // submitForm.classList.remove('wait') 
                             formVehicle.classList.remove('wait')
                             formVehicle.classList.remove('opacity')
+                        } else {
+                            location.assign(wrongUrl)
                         }
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        console.log(err)
+                        location.assign(wrongUrl)
+                    })
                     // // submitForm.classList.add('wait') 
                     // let button
                     // if (button = document.getElementById('profile-form__submit')) button.classList.add('wait') 
@@ -657,5 +766,101 @@ function agreeToCookie(){
                 });
             }
         }
-    })
+        if (document.getElementById('deal')) {
+            let status, notEnaughtCoins, pay, messages, download, sendComment, getNewMessage, coinsCoint, deal
+            if (
+                (status = document.getElementById('status')) && 
+                (notEnaughtCoins = document.getElementById('notEnaughtCoins')) && 
+                (pay = document.getElementById('pay')) && 
+                (messages = document.getElementById('messages')) && 
+                (download = document.getElementById('download')) &&
+                (sendComment = document.getElementById('sendComment')) &&
+                (getNewMessage = document.getElementById('getNewMessage')) &&
+                (coinsCoint = document.getElementById('coinsCoint')) &&
+                (deal = document.getElementById('deal'))
+            ) {
+                
+                pay.addEventListener('submit', function (evt) {
+                    
+                    evt.preventDefault()
+                    const form = evt.target
+                    const body = JSON.stringify({
+                        sum: form.elements.sum.value,
+                        orderId: form.elements.orderId.value
+                    })
+                    const headers = {'Content-Type': 'application/json'}
+                    fetch('/paydeal', {method: 'POST', body, headers})
+                    .then(res => res.json())
+                    .then(res => {
+                        let paramRes = JSON.parse(res)
+                        if (paramRes.paid) {
+                            let statusValue
+                            switch(paramRes.lang) {
+                                case 'ru': statusValue = 'Оплачена';
+                                break;
+                                case 'en': statusValue = 'Paid';
+                                break;
+                            }
+                            status.innerHTML = statusValue
+                            coinsCoint.innerHTML = paramRes.coins
+                            pay.classList.add('hide')
+                            deal.classList.remove('wait')
+                            deal.classList.remove('opacity')
+                        } else {
+                            location.assign(wrongUrl)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        console.log('this is deal err')
+                        location.assign(wrongUrl)
+                    })
+                    deal.classList.add('wait')
+                    deal.classList.add('opacity')
+                })
+
+                sendComment.addEventListener('submit', function (evt) {
+                    evt.preventDefault()
+                    const form = evt.target
+                    const body = JSON.stringify({
+                        comment: form.elements.comment.value,
+                        orderId: form.elements.orderId.value
+                    })
+                    const headers = {'Content-Type': 'application/json'}
+                    fetch('/sendcomment', {method: "POST", body, headers})
+                    .then(res => {
+                        console.log(res)
+                        return res.json()
+                    })
+                    .then(res => {
+                        console.log(res)
+                        let paramRes = JSON.parse(res)
+                        if (paramRes.itisgood) {
+                            let url = paramRes.protocol + '://' + paramRes.domen + ':' + paramRes.port + '/' + paramRes.lang + '/deal/' + paramRes.orderId
+                            
+                            location.assign(url)
+                        } else {
+                            location.assign(wrongUrl)
+                            
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        location.assign(wrongUrl)
+                    })
+                })
+            }
+        }
+        if (document.getElementById('content-provider-deal')) {
+            // fileDownloadingManagementProvider();
+            fileDownloadinChecksumProvider();
+        }
+    }
+
+)
+} catch (err) {
+    console.log('hhiih')
+    console.log(err)
+    location.assign(wrongUrl)
+}
 })()

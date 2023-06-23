@@ -1,0 +1,34 @@
+<article class="main__content content content_deals">
+    <h1 class='content__title'>Это список ваших сделок</h1>
+    <ul class='content__deals deals'>
+        {{#each dealDataArr}}
+        <li class='deals__element deal'>
+            <div class='deal__time'>{{customer_order_date}}</div>
+            <div class='deal__id'>
+                <a href='/{{{../langPath}}}/deal/{{customer_order_id}}' class='normal-link normal-link__input'>Индивидуальный номер вашей сделки - {{customer_order_id}}</a>
+            </div>
+            <div class='deal__status'>Статус вашей сделки -- <span
+                    class='deal__value-status deal__value-status_{{customer_order_status}}'>{{customer_order_status}}</span></div>
+            <div class='deal__sum'>Сумма вашей сделки в коинах -- {{customer_order_amount}}</div>
+        </li>
+        {{!-- <li class='deals__element deal'>
+            <div class='deal__time'>2022-11-25 08:25:14</div>
+            <div class='deal__id'>
+                <a class='normal-link normal-link__input'>Индивидуальный номер вашей сделки - 2</a>
+            </div>
+            <div class='deal__status'>Статус вашей сделки -- <span
+                    class='deal__value-status deal__value-status_paid'>оплачена</span></div>
+            <div class='deal__sum'>Сумма вашей сделки в коинах -- 300</div>
+        </li>
+        <li class='deals__element deal'>
+            <div class='deal__time'>2022-12-04 15:50:52</div>
+            <div class='deal__id'>
+                <a class='normal-link normal-link__input'>Индивидуальный номер вашей сделки - 3</a>
+            </div>
+            <div class='deal__status'>Статус вашей сделки -- <span
+                    class='deal__value-status deal__value-status_unpaid'>не оплачена</span></div>
+            <div class='deal__sum'>Сумма вашей сделки в коинах -- 100</div>
+        </li> --}}
+        {{/each}}
+    </ul>
+</article>

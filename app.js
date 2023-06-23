@@ -2,15 +2,19 @@ const express = require('express')
 const expressHandlebars = require('express-handlebars')
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const indexRouterAdmin = require('./routes/indexAdmin')
+const authRouterAdmin = require('./routes/authAdmin') // возможно надо будет удалить. Пока только пробую
+const multiparty = require('multiparty')
 const passport = require('passport'); // это для аутентификации
 const LocalStrategy = require('passport-local'); // это для аутентификации
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-
+const fs = require('fs') // возможно потом надо будет удалить
 const langManager = require('./lib/langManager')
 const commonVar = require('./lib/commonVar')
 const vhost = require('vhost')
+const db = require('./db')
 let { credentials, domen, protocol, port } = require('./config')
 
 
@@ -62,12 +66,19 @@ app.use((req, res, next) => { // это промежуточное по полу
     req[projectSymbolName]['lang'] = lang // в объекте запроса мы создаем собственное свойство, в которое можно записывать свои данные 
     next()
 })
+// app.use((req, res, next) => {
+//     let urlRegistrationGet = '/e8362f1dc52050f73115520eb312218d53a8898c10722867de3aa9050b736ddf01fc56acc84c5a8' + Math.floor(Number(new Date())/100000)
+// console.log('urlRegistrationGet')
+// console.log(urlRegistrationGet)
+//     req[projectSymbolName]['urlRegistrationGet'] = urlRegistrationGet
+// })
 
 
-admin.get('*', (req, res) => res.send('Добро пожаловать, администратор!'))
+
 www.get('*', (req, res) => res.redirect(303, protocol + '://' + domen + ':' + port)) // это переопределение с любого www на главную страницу
 
-
+admin.use('/', indexRouterAdmin)
+admin.use('/', authRouterAdmin)
 app.use('/', indexRouter);
 app.use('/', authRouter);
 

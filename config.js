@@ -8,4 +8,5 @@ const host = 'localhost'
 const user = 'admin_chiptuning'
 const password = 'Vagon_3611'
 const database = 'chiptuning'
-module.exports = { credentials , domen, protocol, host, user, password, database, port, sberUserName }
+const fileMaxSize = 1024*1024
+module.exports = { credentials , domen, protocol, host, user, password, database, port, sberUserName, fileMaxSize }

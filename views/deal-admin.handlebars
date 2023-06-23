@@ -1,0 +1,148 @@
+
+        <article class='content-provider-deal' id="content-provider-deal">
+            <h1 class='content-provider-deal__title'>Карточка сделки</h1>
+            <div class='content-provider-deal__customer-data provider-customer-data'>
+                <h2 class="provider-customer-data__title">Данные клиента</h2>
+                {{!-- customer_id, customer_email, customer_telephone, customer_valuta, customer_registration_date, customer_coins --}}
+{{!-- customerArr --}}
+                <ul class="provider-customer-data__data-list">
+                    <li class='provider-customer-data__data-element'>ID клиента - {{customerArr.customer_id}}</li>
+                    <li class='provider-customer-data__data-element'>Email клиента - {{customerArr.customer_email}}</li>
+                    <li class='provider-customer-data__data-element'>Телефон клинта - {{customerArr.customer_telephone}}</li>
+                    <li class='provider-customer-data__data-element'>Валюта - {{customerArr.customer_valuta}}</li>
+                    <li class='provider-customer-data__data-element'>Дата регистрации клиента - {{customerArr.customer_registration_date}}</li>
+                    <li class='provider-customer-data__data-element'>Количество коинов которыми располагает клиент -
+                        {{customerArr.customer_coins}}</li>
+                </ul>
+            </div>
+            {{!-- customer_order_id, customer_id, service_type_id, customer_order_amount , customer_order_date , customer_order_status , provider_id, customer_order_pay_date ,customer_delete--}}
+            <div class="content-provider-deal__deal-data provider-deal-data">
+                <h2 class="provider-deal-data__title">Данные сделки</h2>
+                <ul class='provider-deal-data__data-list'>
+                    <li class='provider-deal-data__data-element'>ID сделки - <span class=''>{{customerOrderArr.customer_order_id}}</span></li>
+                    {{!-- <li class='provider-deal-data__data-element'>Тип услуги - <span class=''>1</span></li> --}}
+                    <li class='provider-deal-data__data-element'>Сумма сделки - <span class=''>{{customerOrderArr.customer_order_amount}}</span></li>
+                    <li class='provider-deal-data__data-element'>Дата сделки - <span class=''>{{customerOrderArr.customer_order_date}}</span></li>
+                    <li class='provider-deal-data__data-element'>Статус - <span class=''>{{customerOrderArr.customer_order_status}}</span></li>
+                    <li class='provider-deal-data__data-element'>За кем закреплена сделка - <span class=''>{{#if customerOrderArr.provider_id }} {{customerOrderArr.provider_id}} {{else}} <form class='provider-button-make-my-deal-form' method='POST' action='/makeDealMy'>
+                            <input type='hidden' name='provider_id' value='{{providerId}}'>
+                            <input type='hidden' name='customer_order_id' value='{{customerOrderId}}'>
+                            <input class='provider-button-make-my-deal-form__submit' type='submit' value='Сделать моей сделкой'>
+                        </form>{{/if}}</span></li>
+                    <li class='provider-deal-data__data-element'>Дата оплаты сделки - <span class=''>{{customerOrderArr.customer_order_pay_date}}</span></li>
+                    <li class='provider-deal-data__data-element'>Была ли сделка удалена - <span class=''>{{customerOrderArr.customer_delete}}</span></li>
+                    {{#if customerOrderArr.provider_id}}
+                    <li class='provider-deal-data__data-element'>
+                        <form class='provider-button-change-status' method='POST' action='/changestatus'>
+                            {{!-- <input type='hidden' name='Page' value='/deal'> --}}
+                            <input type='hidden' name='customer_order_id' value='{{customerOrderId}}'>
+                            <input type='hidden' name='provider_id' value='{{providerId}}'>
+                            <label><input type='radio' name='customer_order_status' value='being_done'>В работе</label>
+                            <label><input type='radio' name='customer_order_status' value='done'>Работа
+                                выполнена</label>
+                            <label><input type='radio' name='customer_order_status' value='paid'
+                                    checked>Оплачена</label>
+                            <input class='provider-button-change-status_submit' type='submit' value='Изменить статус'>
+                        </form>
+                    </li>
+                    {{/if}}
+                </ul>
+            </div>
+            <div class='content-provider-deal__parameters provider-deal-parameters'>
+                <h2 class='provider-deal-parameters__title'>Технические данные сделки</h2>
+                <ul class='provider-deal-parameters__list'>
+                {{#each customerOrderDataArr}}
+                    <li class='provider-deal-parameters__element'>{{customer_order_data_name}} - <span
+                            class='provider-deal-parameters__element-value'>{{customer_order_data_value}}</span></li>
+
+                {{/each}}
+                </ul>
+            </div>
+            <div class='content-provider-deal__ordered provider-deal-ordered'>
+                <h2 class='provider-deal-ordered__title'>Заказанные услуги</h2>
+                <ul class='provider-deal-ordered__list'>
+                {{#each customerOrderService}}
+                    <li class='provider-deal-ordered__element'>{{service_name}}</li>
+                {{/each}}
+                </ul>
+            </div>
+            {{#if customerOrderArr.provider_id}}
+            <div class='provider-button-download' method='POST' action='/uploadcustfile'>
+                <fieldset class='provider-button-download__block'>
+                    <legend class='provider-button-download__title'>Скачать файл заказчика</legend>
+                    
+                    <a href="/admin-download?id={{customerOrderId}}" class='provider-button-download__submit' >Скачать файл заказчика</a>
+                </fieldset>
+            </div>
+           
+            <div class='provider-checksum-block'>
+                <h3 class='provider-checksum-block__title'>Проверка корректности скаченного файла</h3>
+                <div id='downloading-file-checksum' class='hide'>7db7</div>
+                <div class='provider-checksum-block__message provider-checksum-block__message_ok hide'
+                    id='downloading-file-checksum-message-ok'>Контрольные суммы совпали. Клиентский файл скачен без
+                    проблем</div>
+                <div class='provider-checksum-block__message provider-checksum-block__message_trouble hide'
+                    id='downloading-file-checksum-message-trouble'>Контрольные суммы не совпали. Клиентский файл нужно
+                    скачать еще раз и еще раз проверить контрольные суммы</div>
+                <div class='provider-checksum-block__message provider-checksum-block__message_trouble hide'
+                    id='downloading-file-no-file'>Вы проверяете какой-то левый файл. На данной сделке еще нет файла от
+                    клиента</div>
+                <label class='provider-checksum-block__submit'>
+                    Выбрать файл
+                    <input class='hide' type='file' name='downloadingfile' id='downloading-file'>
+                </label>
+            </div>
+
+
+            <form class='provider-download-treated-file-block' method='POST' action='/admin-upload'
+                enctype='multipart/form-data'>
+                <fieldset class='provider-download-treated-file-form__block'>
+                    <legend class='provider-download-treated-file-form__title'>Загрузка обработанного файла</legend>
+                    <div class='provider-download-treated-file-form__message'></div>
+                    <input type='hidden' name='customer_order_id' value='{{customerOrderId}}'>
+                    <input type="hidden" name="provider_id" value="{{providerId}}">
+                    <input type='hidden' name='MAX_FILE_SIZE' value='10485760'>
+                    <label class='provider-download-treated-file-form__button-choose-file'>
+                        Выбрать файл
+                        <input class='hide' type='file' name='treatedfile' id='treated-file'>
+                    </label>
+                    <input id='checksum-treated-file' type='hidden' name='checksumtreatedfile' value="lkjkj"> {{!-- это value заглушка --}}
+                    <button class='provider-download-treated-file-form__button-upload' type='submit'>Загрузить
+                        файл</button>
+                </fieldset>
+            </form>
+            {{/if}}
+
+            <h2 class='provider-messages__title'>Переписка</h2>
+            <ul class='provider-messages__messages'>
+            {{#each message}}
+                <li class='provider-messages__message provider-messages__message_{{message_from}} provider-messages__element'>
+                    <div>{{message_date}}</div>
+                    <div class=''>{{message_content}}</div>
+                    {{#if ../customerOrderArr.provider_id}}
+                    {{#if seen_form}}
+                    <form class='provider-seen-button' action='messageSeen' method='POST'>
+                        <input type='hidden' name='provider_id' value='{{../providerId}}'>
+                        <input type='hidden' name='customer_order_id' value='{{../customerOrderId}}'>
+                        <input type='hidden' name='message_id' value='{{message_id}}'>
+                        {{!-- <input type='hidden' name='button_message_seen' value='1'> --}}
+                        <input class='provider-seen-button__submit' type='submit' value='Просмотрено'>
+                    </form>
+                    {{/if}}
+                    {{/if}}
+                </li>
+                
+            {{/each}}
+                {{#if customerOrderArr.provider_id}}
+                <li class='provider-messages__element'>
+                    <form class='provider-form-textarea' action='/deal' method='POST'>
+                        <textarea class='provider-form-textarea__field' name='message_content'></textarea>
+                        <input type='hidden' name='Page' value='/deal'>
+                        <input type='hidden' name='customer_order_id' value='3'>
+                        <input class='provider-form-textarea__submit' type='submit' value='Отправить'>
+                    </form>
+                </li>
+                {{/if}}
+            </ul>
+        </article>
+    
